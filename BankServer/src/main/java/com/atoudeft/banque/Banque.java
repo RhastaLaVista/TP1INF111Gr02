@@ -94,11 +94,31 @@ public class Banque implements Serializable {
      * @return true si le compte a été créé correctement
      */
     public boolean ajouter(String numCompteClient, String nip) {
+
+        // Vérifier que le numéro a entre 6 et 8 caractères et ne contient que des lettres majuscules et des chiffres.
+        if (numCompteClient.length() < 6 || numCompteClient.length() > 8 || !numCompteClient.matches("[A-Z0-9]+")){
+            return false;
+        }
+
+        // Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres.
+        if (nip.length() < 4 || nip.length() > 5 || !nip.matches("[0-9]+")){
+            return false;
+        }
+
+        // Vérifier s'il y a déjà un compte-client avec le numéro
+        for (com.atoudeft.banque.CompteClient compte : this.comptes) {
+            if (compte.getNumCompteClient().equals(numCompteClient)) {
+                return false;
+            }
+        }
+
+        // Créer un nouveau compte client
+        CompteClient nouveauCompte = new CompteClient(numCompteClient, nip);
+
         /*À compléter et modifier :
-            - Vérifier que le numéro a entre 6 et 8 caractères et ne contient que des lettres majuscules et des chiffres.
-              Sinon, retourner false.
-            - Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres. Sinon,
-              retourner false.
+
+
+
             - Vérifier s'il y a déjà un compte-client avec le numéro, retourner false.
             - Sinon :
                 . Créer un compte-client avec le numéro et le nip;
@@ -107,7 +127,7 @@ public class Banque implements Serializable {
                 . Créer un compte-chèque avec ce numéro et l'ajouter au compte-client;
                 . Ajouter le compte-client à la liste des comptes et retourner true.
          */
-        return this.comptes.add(new CompteClient(numCompteClient,nip)); //À modifier
+        return this.comptes.add(new com.atoudeft.banque.CompteClient(numCompteClient,nip)); //À modifier
     }
 
     /**
