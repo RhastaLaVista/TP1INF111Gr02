@@ -88,6 +88,8 @@ public class ServeurBanque extends Serveur {
         for (Connexion cnx:connectes){
             if(cnx instanceof ConnexionBanque){
                 if(((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
+                    cnx.envoyer("END");
+                    cnx.close();
                     connectes.remove(cnx);
                 }
             }
