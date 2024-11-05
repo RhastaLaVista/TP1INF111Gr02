@@ -9,7 +9,6 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/atoudeft/commun/thread/Lecteur.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/atoudeft/commun/thread/ThreadEcouteurDeTexte.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/programmes/ProgrammeServeurTP1.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="windows-1252" />
   </component>
