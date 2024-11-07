@@ -5,22 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0968fcb0-73a1-430b-8789-b6593e556b37" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/banque.data" beforeDir="false" afterPath="$PROJECT_DIR$/banque.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ConnexionBanque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ConnexionBanque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ServeurBanque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ServeurBanque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/SocketsExempleSimple.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/src/ClientSimple.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SocketsExempleSimple/src/ServeurSimple.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ThreadDesInactifs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ThreadDesInactifs.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,40 +19,40 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "RhastaLaVista"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;RhastaLaVista&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/RhastaLaVista/TP1INF111Gr02.git",
-    "accountId": "4b46897c-942e-453f-b493-c52b4528ec37"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/RhastaLaVista/TP1INF111Gr02.git&quot;,
+    &quot;accountId&quot;: &quot;4b46897c-942e-453f-b493-c52b4528ec37&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2oR6DZ0TIY5Ez5XEfj0SewygGfY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ProgrammeServeurTP1.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Application.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "testbranch",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Ekrem Yoruk/OneDrive/Documents/TP1INF111Gr02/BankServer",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ProgrammeServeurTP1.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Application.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;testbranch&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ekrem Yoruk/OneDrive/Documents/TP1INF111Gr02/BankServer&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="main" type="Application" factoryName="Application" singleton="false">
       <option name="ALTERNATIVE_JRE_PATH" value="corretto-1.8" />
@@ -85,5 +74,15 @@
       <updated>1730819921865</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

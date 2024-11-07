@@ -29,7 +29,11 @@ public class ConnexionBanque extends Connexion {
      * @return true la durée d'inactivité est supérieure à delai
      */
     public boolean estInactifDepuis(long delai) {
-       return (delai <= this.getTempsDerniereOperation());
+
+        long mesure = System.currentTimeMillis() - getTempsDerniereOperation();
+        System.out.println(mesure);
+        System.out.println(System.currentTimeMillis());
+        return (delai <= mesure);
     }
 
     /**

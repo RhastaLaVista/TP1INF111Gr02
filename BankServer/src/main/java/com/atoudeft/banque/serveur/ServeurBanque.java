@@ -6,6 +6,8 @@ import com.atoudeft.commun.net.Connexion;
 import com.atoudeft.serveur.Serveur;
 
 import java.util.ListIterator;
+import java.util.Objects;
+
 /**
  * Cette classe étend (hérite) la classe Serveur et y ajoute le nécessaire pour que le
  * serveur soit un serveur de banque.
@@ -85,15 +87,19 @@ public class ServeurBanque extends Serveur {
      */
     public void supprimeInactifs() {
 
-        for (Connexion cnx:connectes){
-            if(cnx instanceof ConnexionBanque){
-                if(((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
+        for (Connexion cnx : connectes){
+            if(!connectes.isEmpty() && cnx instanceof ConnexionBanque && ((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
+                    System.out.println("User gone");
                     cnx.envoyer("END");
                     cnx.close();
-                    connectes.remove(cnx);
+                    if(ThreadDesInactifs.interrupted()) {
+                        connectes.remove(cnx);
+
+                    }
+                    connectes.removeIf(Objects::isNull);
+                    System.out.println(list());
                 }
             }
 
         }
     }
-}
