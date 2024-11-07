@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0968fcb0-73a1-430b-8789-b6593e556b37" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/banque.data" beforeDir="false" afterPath="$PROJECT_DIR$/banque.data" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ConnexionBanque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ConnexionBanque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ServeurBanque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ServeurBanque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ThreadDesInactifs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/serveur/ThreadDesInactifs.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

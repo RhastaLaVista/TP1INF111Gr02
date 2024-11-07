@@ -31,8 +31,6 @@ public class ConnexionBanque extends Connexion {
     public boolean estInactifDepuis(long delai) {
 
         long mesure = System.currentTimeMillis() - getTempsDerniereOperation();
-        System.out.println(mesure);
-        System.out.println(System.currentTimeMillis());
         return (delai <= mesure);
     }
 
