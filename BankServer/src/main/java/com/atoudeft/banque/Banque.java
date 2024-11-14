@@ -106,27 +106,33 @@ public class Banque implements Serializable {
         }
 
         // Vérifier s'il y a déjà un compte-client avec le numéro
-        for (com.atoudeft.banque.CompteClient compte : this.comptes) {
-            if (compte.getNumCompteClient().equals(numCompteClient)) {
+        //for (com.atoudeft.banque.CompteClient compte : this.comptes) {
+
+        if (this.comptes.contains(numCompteClient)) {
                 return false;
-            }
         }
 
         // Créer un nouveau compte client
         CompteClient nouveauCompte = new CompteClient(numCompteClient, nip);
 
-        /*À compléter et modifier :
+        // Si toutes les vérifications sont passées, on peut créer un nouveau compte-client.
+        CompteClient nouveauCompteClient = new CompteClient(numCompteClient, nip);
 
+        // Générer un nouveau numéro de compte bancaire.
+        String numeroCompteBancaire = CompteBancaire.genereNouveauNumero();
 
+        // Créer un compte bancaire avec ce numéro.
+        CompteBancaire compteBancaire = new CompteBancaire(numeroCompteBancaire);
 
-            - Vérifier s'il y a déjà un compte-client avec le numéro, retourner false.
-            - Sinon :
-                . Créer un compte-client avec le numéro et le nip;
-                . Générer (avec CompteBancaire.genereNouveauNumero()) un nouveau numéro de compte bancaire qui n'est
-                  pas déjà utilisé;
-                . Créer un compte-chèque avec ce numéro et l'ajouter au compte-client;
-                . Ajouter le compte-client à la liste des comptes et retourner true.
-         */
+        // Ajouter ce compte bancaire au compte client.
+        nouveauCompteClient.ajouter(compteBancaire);
+
+        // Ajouter le compte-client à la liste des comptes de la banque.
+        this.comptes.add(nouveauCompteClient);
+
+        // Retourner true pour indiquer que l'ajout a réussi.
+        return true;
+
         return this.comptes.add(new com.atoudeft.banque.CompteClient(numCompteClient,nip)); //À modifier
     }
 
