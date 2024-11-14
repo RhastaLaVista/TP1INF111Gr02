@@ -5,7 +5,10 @@ import com.atoudeft.banque.io.EntreesSorties;
 import com.atoudeft.commun.net.Connexion;
 import com.atoudeft.serveur.Serveur;
 
+import java.util.Collections;
 import java.util.ListIterator;
+import java.util.Objects;
+
 /**
  * Cette classe étend (hérite) la classe Serveur et y ajoute le nécessaire pour que le
  * serveur soit un serveur de banque.
@@ -15,7 +18,7 @@ import java.util.ListIterator;
  * @since 2024-08-20
  */
 public class ServeurBanque extends Serveur {
-    public static final int DELAI_INACTIVITE = 5000;
+    public static final int DELAI_INACTIVITE = 30000;
     //Référence vers la banque gérée par ce serveur :
     private Banque banque;
     //Thread qui supprime les connexions inactives :
@@ -84,6 +87,14 @@ public class ServeurBanque extends Serveur {
      * du TP).
      */
     public void supprimeInactifs() {
-        //À définir :
+
+        for (int i = 0;i< connectes.size();i++){
+            if(!connectes.isEmpty() && connectes.get(i) instanceof ConnexionBanque && ((ConnexionBanque) connectes.get(i)).estInactifDepuis(DELAI_INACTIVITE)){
+                    connectes.removeAll(Collections.singleton(null));
+                    connectes.get(i).envoyer("END");
+                    connectes.get(i).close();
+                    connectes.remove(i);
+                }
+            }
+        }
     }
-}
