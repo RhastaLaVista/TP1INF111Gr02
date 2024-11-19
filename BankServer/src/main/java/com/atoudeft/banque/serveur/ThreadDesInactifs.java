@@ -18,6 +18,7 @@ public class ThreadDesInactifs extends Thread {
             try {
                 Thread.sleep(DELAI_SLEEP);
             } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
                 break;
             }
         }
