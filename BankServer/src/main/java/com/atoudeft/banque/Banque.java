@@ -1,6 +1,5 @@
 package com.atoudeft.banque;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class Banque implements Serializable {
      * @return  true si le compte-bancaire appartient au compte-client
      */
     public boolean appartientA(String numeroCompteBancaire, String numeroCompteClient) {
-        throw new NotImplementedException();
+        return false;
     }
 
     /**
@@ -49,7 +48,7 @@ public class Banque implements Serializable {
      * @return true si le dépot s'est effectué correctement
      */
     public boolean deposer(double montant, String numeroCompte) {
-        throw new NotImplementedException();
+        return false;
     }
 
     /**
@@ -60,7 +59,7 @@ public class Banque implements Serializable {
      * @return true si le retrait s'est effectué correctement
      */
     public boolean retirer(double montant, String numeroCompte) {
-        throw new NotImplementedException();
+        return false;
     }
 
     /**
@@ -71,7 +70,7 @@ public class Banque implements Serializable {
      * @return true si l'opération s'est déroulée correctement
      */
     public boolean transferer(double montant, String numeroCompteInitial, String numeroCompteFinal) {
-        throw new NotImplementedException();
+        return false;
     }
 
     /**
@@ -83,7 +82,7 @@ public class Banque implements Serializable {
      * @return true si le paiement s'est bien effectuée
      */
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
-        throw new NotImplementedException();
+        return false;
     }
 
     /**
@@ -110,6 +109,7 @@ public class Banque implements Serializable {
             if (compte.getNumCompteClient().equals(numCompteClient)) {
                 return false;
             }
+
         }
 
         // Créer un nouveau compte client
@@ -139,5 +139,39 @@ public class Banque implements Serializable {
     public String getNumeroCompteParDefaut(String numCompteClient) {
         //À compléter : retourner le numéro du compte-chèque du compte-client.
         return null; //À modifier
+    }
+
+    //Guillaume Chrétien-Richardson
+    /**
+     * Vérifie dans la liste de compte-client si le compte client spécifié existe et vérifie si ce compte
+     * possède un compte bancaire du type spécifié.
+     * @param numeroCompteClient numéro du compte client.
+     * @param typeCompte type de compte que l'on souhaite vérifier.
+     * @return true si le compte spécifié détient un compte bancaire du type spécifié.
+     */
+    public boolean verifSiDejaCompte(String numeroCompteClient, TypeCompte typeCompte) {
+        if(this.comptes.contains(getCompteClient(numeroCompteClient))){
+            return getCompteClient(numeroCompteClient).verifTypeCompte(typeCompte);
+        } else {
+            return false;
+        }
+    }
+    //Guillaume Chrétien-Richardson
+    /**
+     *
+     * @return
+     */
+    public String getNumCompteBancaireValide() {
+        boolean valide = false;
+        String numCompteBancaire = null;
+        while (!valide) {
+            numCompteBancaire = CompteBancaire.genereNouveauNumero();
+            for (com.atoudeft.banque.CompteClient compte : this.comptes) {
+                if (!compte.verifNumCompte(numCompteBancaire)) {
+                    valide = true;
+                }
+            }
+        }
+        return numCompteBancaire;
     }
 }

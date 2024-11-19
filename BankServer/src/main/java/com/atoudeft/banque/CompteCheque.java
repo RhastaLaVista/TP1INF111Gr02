@@ -1,4 +1,4 @@
-package BankServer.src.main.java.com.atoudeft.banque;
+package com.atoudeft.banque;
 
 public class CompteCheque extends com.atoudeft.banque.CompteBancaire {
     /**
