@@ -11,6 +11,7 @@ public class Banque implements Serializable {
     private List<CompteClient> comptes;
 
     public Banque(String nom) {
+
         this.nom = nom;
         this.comptes = new ArrayList<>();
     }
@@ -22,7 +23,7 @@ public class Banque implements Serializable {
      * @return le compte-client s'il a été trouvé. Sinon, retourne null
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
-        CompteClient cpt = new CompteClient(numeroCompteClient,"");
+        CompteClient cpt = new CompteClient(numeroCompteClient, "");
         int index = this.comptes.indexOf(cpt);
         if (index != -1)
             return this.comptes.get(index);
@@ -34,8 +35,8 @@ public class Banque implements Serializable {
      * Vérifier qu'un compte-bancaire appartient bien au compte-client.
      *
      * @param numeroCompteBancaire numéro du compte-bancaire
-     * @param numeroCompteClient    numéro du compte-client
-     * @return  true si le compte-bancaire appartient au compte-client
+     * @param numeroCompteClient   numéro du compte-client
+     * @return true si le compte-bancaire appartient au compte-client
      */
     public boolean appartientA(String numeroCompteBancaire, String numeroCompteClient) {
         throw new NotImplementedException();
@@ -44,7 +45,7 @@ public class Banque implements Serializable {
     /**
      * Effectue un dépot d'argent dans un compte-bancaire
      *
-     * @param montant montant à déposer
+     * @param montant      montant à déposer
      * @param numeroCompte numéro du compte
      * @return true si le dépot s'est effectué correctement
      */
@@ -55,7 +56,7 @@ public class Banque implements Serializable {
     /**
      * Effectue un retrait d'argent d'un compte-bancaire
      *
-     * @param montant montant retiré
+     * @param montant      montant retiré
      * @param numeroCompte numéro du compte
      * @return true si le retrait s'est effectué correctement
      */
@@ -65,9 +66,10 @@ public class Banque implements Serializable {
 
     /**
      * Effectue un transfert d'argent d'un compte à un autre de la même banque
-     * @param montant montant à transférer
-     * @param numeroCompteInitial   numéro du compte d'où sera prélevé l'argent
-     * @param numeroCompteFinal numéro du compte où sera déposé l'argent
+     *
+     * @param montant             montant à transférer
+     * @param numeroCompteInitial numéro du compte d'où sera prélevé l'argent
+     * @param numeroCompteFinal   numéro du compte où sera déposé l'argent
      * @return true si l'opération s'est déroulée correctement
      */
     public boolean transferer(double montant, String numeroCompteInitial, String numeroCompteFinal) {
@@ -76,10 +78,11 @@ public class Banque implements Serializable {
 
     /**
      * Effectue un paiement de facture.
-     * @param montant montant de la facture
-     * @param numeroCompte numéro du compte bancaire d'où va se faire le paiement
+     *
+     * @param montant       montant de la facture
+     * @param numeroCompte  numéro du compte bancaire d'où va se faire le paiement
      * @param numeroFacture numéro de la facture
-     * @param description texte descriptif de la facture
+     * @param description   texte descriptif de la facture
      * @return true si le paiement s'est bien effectuée
      */
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
@@ -90,60 +93,76 @@ public class Banque implements Serializable {
      * Crée un nouveau compte-client avec un numéro et un nip et l'ajoute à la liste des comptes.
      *
      * @param numCompteClient numéro du compte-client à créer
-     * @param nip nip du compte-client à créer
+     * @param nip             nip du compte-client à créer
      * @return true si le compte a été créé correctement
      */
     public boolean ajouter(String numCompteClient, String nip) {
 
         // Vérifier que le numéro a entre 6 et 8 caractères et ne contient que des lettres majuscules et des chiffres.
-        if (numCompteClient.length() < 6 || numCompteClient.length() > 8 || !numCompteClient.matches("[A-Z0-9]+")){
+        if (numCompteClient.length() < 6 || numCompteClient.length() > 8 || !numCompteClient.matches("[A-Z0-9]+")) {
             return false;
         }
 
         // Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres.
-        if (nip.length() < 4 || nip.length() > 5 || !nip.matches("[0-9]+")){
+        if (nip.length() < 4 || nip.length() > 5 || !nip.matches("[0-9]+")) {
             return false;
         }
-
-        // Vérifier s'il y a déjà un compte-client avec le numéro
-        //for (com.atoudeft.banque.CompteClient compte : this.comptes) {
-
+        // 1. Vérifier si le numéro du compte-client existe déjà
         if (this.comptes.contains(numCompteClient)) {
-                return false;
+            return false; // Si le compte-client existe déjà, retourner false
+        } else {
+            // 2. Créer un nouveau compte-client avec le numéro et le NIP
+            CompteClient nouveauCompte = new CompteClient(numCompteClient, nip);
+
+            // 3. Générer un nouveau numéro de compte bancaire
+            String numeroCompteBancaire = CompteBancaire.genereNouveauNumero();
+
+            // 4. Vérifier si ce numéro existe déjà dans tous les comptes bancaires
+            for (CompteClient client : this.comptes) {
+                for (CompteBancaire compte : client.getComptes()) {
+                    if (compte.getNumero().equals(numeroCompteBancaire)) {
+                        return false;
+
+
+                    } else {
+                        // 5. Créer un compte-chèque avec ce numéro de compte bancaire
+                        CompteCheque compteCheque = new CompteCheque(numeroCompteBancaire, TypeCompte.CHEQUE);
+                        nouveauCompte.ajouter(compteCheque);
+
+                        // 6. Ajouter le compte-client à la liste des comptes de la banque
+                        this.comptes.add(nouveauCompte);
+
+                        // 7. Retourner true pour indiquer que l'ajout a réussi
+                        return true;
+                    }
+                }
+            }
         }
-
-        // Créer un nouveau compte client
-        CompteClient nouveauCompte = new CompteClient(numCompteClient, nip);
-
-        // Si toutes les vérifications sont passées, on peut créer un nouveau compte-client.
-        CompteClient nouveauCompteClient = new CompteClient(numCompteClient, nip);
-
-        // Générer un nouveau numéro de compte bancaire.
-        String numeroCompteBancaire = CompteBancaire.genereNouveauNumero();
-
-        // Créer un compte bancaire avec ce numéro.
-        CompteBancaire compteBancaire = new CompteBancaire(numeroCompteBancaire);
-
-        // Ajouter ce compte bancaire au compte client.
-        nouveauCompteClient.ajouter(compteBancaire);
-
-        // Ajouter le compte-client à la liste des comptes de la banque.
-        this.comptes.add(nouveauCompteClient);
-
-        // Retourner true pour indiquer que l'ajout a réussi.
-        return true;
-
-        return this.comptes.add(new com.atoudeft.banque.CompteClient(numCompteClient,nip)); //À modifier
+        return false;
     }
 
-    /**
-     * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
-     *
-     * @param numCompteClient numéro de compte-client
-     * @return numéro du compte-chèque du client ayant le numéro de compte-client
-     */
-    public String getNumeroCompteParDefaut(String numCompteClient) {
-        //À compléter : retourner le numéro du compte-chèque du compte-client.
-        return null; //À modifier
+
+
+            /**
+             * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
+             *
+             * @param numCompteClient numéro de compte-client
+             * @return numéro du compte-chèque du client ayant le numéro de compte-client
+             */
+            public String getNumeroCompteParDefaut(String numCompteClient){
+                for (CompteClient client : comptes) {
+                    if (client.getNumero().equals(numCompteClient)) {
+                        for (CompteBancaire compte : client.getComptes()) {
+                            if (compte.getType() == TypeCompte.CHEQUE) {
+                                return compte.getNumero();
+
+                            }
+                        }
+                    }
+                }
+                return "";
+            }
     }
-}
+
+
+
