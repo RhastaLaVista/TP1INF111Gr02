@@ -47,4 +47,37 @@ public class CompteClient implements Serializable {
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
+
+    public Object getNumCompteClient() {
+        return this.numero;
+    }
+
+    //Guillaume Chrétien-Richardson
+    /**
+     * Vérifie si le compte client possède déjà un compte d'un type spécifique.
+     * @param typeCompte le type de compte que l'on souhaite vérifier.
+     * @return true si le compte contient déjà le type spécifié en paramètre, false dans le cas contraire
+     */
+    public boolean verifTypeCompte(TypeCompte typeCompte) {
+        for (CompteBancaire compte : comptes) {
+            if (compte.getType() == typeCompte) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Guillaume Chrétien-Richardson
+    /**
+     *
+     * @param numCompteBancaire
+     * @return
+     */
+    public boolean verifNumCompte(String numCompteBancaire) {
+        for (CompteBancaire compte : comptes) {
+            if (compte.getNumero().equals(numCompteBancaire)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

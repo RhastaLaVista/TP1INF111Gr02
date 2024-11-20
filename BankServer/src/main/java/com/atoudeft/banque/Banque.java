@@ -136,6 +136,7 @@ public class Banque implements Serializable {
                     }
                 }
             }
+
         }
         return false;
     }
@@ -163,5 +164,37 @@ public class Banque implements Serializable {
             }
     }
 
-
-
+    //Guillaume Chrétien-Richardson
+    /**
+     * Vérifie dans la liste de compte-client si le compte client spécifié existe et vérifie si ce compte
+     * possède un compte bancaire du type spécifié.
+     * @param numeroCompteClient numéro du compte client.
+     * @param typeCompte type de compte que l'on souhaite vérifier.
+     * @return true si le compte spécifié détient un compte bancaire du type spécifié.
+     */
+    public boolean verifSiDejaCompte(String numeroCompteClient, TypeCompte typeCompte) {
+        if(this.comptes.contains(getCompteClient(numeroCompteClient))){
+            return getCompteClient(numeroCompteClient).verifTypeCompte(typeCompte);
+        } else {
+            return false;
+        }
+    }
+    //Guillaume Chrétien-Richardson
+    /**
+     *
+     * @return
+     */
+    public String getNumCompteBancaireValide() {
+        boolean valide = false;
+        String numCompteBancaire = null;
+        while (!valide) {
+            numCompteBancaire = CompteBancaire.genereNouveauNumero();
+            for (com.atoudeft.banque.CompteClient compte : this.comptes) {
+                if (!compte.verifNumCompte(numCompteBancaire)) {
+                    valide = true;
+                }
+            }
+        }
+        return numCompteBancaire;
+    }
+}
