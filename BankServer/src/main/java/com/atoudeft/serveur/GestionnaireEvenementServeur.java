@@ -69,7 +69,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     //vérification des credentiels envoyés
                     if(banque.getCompteClient(numCompteClient) != null){
-                        if(banque.getCompteClient(numCompteClient).){
+                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
                         cnx.envoyer("CONNECT OK");
                         cnx.setNumeroCompteClient(numCompteClient);
                         }
