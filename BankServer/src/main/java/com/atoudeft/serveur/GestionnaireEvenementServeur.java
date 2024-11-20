@@ -9,6 +9,9 @@ import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
+import java.util.Collections;
+import java.util.ListIterator;
+
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
  * il crée un événement à partir du texte reçu et alerte ce gestionnaire qui réagit en gérant l'événement.
@@ -50,6 +53,32 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             cnx.setTempsDerniereOperation(System.currentTimeMillis());
             switch (typeEvenement) {
                 /******************* COMMANDES GÉNÉRALES *******************/
+                case "CONNECT":
+                    argument = evenement.getArgument();
+                    t = argument.split(":");
+
+                    numCompteClient = t[0];
+                    nip = t[1];
+
+                    banque = serveurBanque.getBanque();
+                    //vérification de si cette compte est déja connectée dans une autre instance de BankClient
+                    for(Connexion cnected: serveur.connectes) {
+                        if (cnected instanceof ConnexionBanque
+                                && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
+                        ){
+                        cnx.envoyer("CONNECT NO");
+                        }
+                    }
+                    //vérification des credentiels envoyés
+                    if(banque.getCompteClient(numCompteClient) != null){
+                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
+                        cnx.envoyer("CONNECT OK");
+                        cnx.setNumeroCompteClient(numCompteClient);
+                        }
+                    }
+
+                    //
+                    break;
                 case "EXIT": //Ferme la connexion avec le client qui a envoyé "EXIT":
                     cnx.envoyer("END");
                     serveurBanque.enlever(cnx);
