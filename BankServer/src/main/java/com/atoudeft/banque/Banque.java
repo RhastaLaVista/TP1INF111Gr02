@@ -1,9 +1,9 @@
 package com.atoudeft.banque;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Banque implements Serializable {
     private String nom;
@@ -136,32 +136,62 @@ public class Banque implements Serializable {
                     }
                 }
             }
+
         }
         return false;
     }
 
+    /**
+     * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
+     *
+     * @param numCompteClient numéro de compte-client
+     * @return numéro du compte-chèque du client ayant le numéro de compte-client
+     */
+    public String getNumeroCompteParDefaut(String numCompteClient) {
+        for (CompteClient client : comptes) {
+            if (client.getNumero().equals(numCompteClient)) {
+                for (CompteBancaire compte : client.getComptes()) {
+                    if (compte.getType() == TypeCompte.CHEQUE) {
+                        return compte.getNumero();
 
-
-            /**
-             * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
-             *
-             * @param numCompteClient numéro de compte-client
-             * @return numéro du compte-chèque du client ayant le numéro de compte-client
-             */
-            public String getNumeroCompteParDefaut(String numCompteClient){
-                for (CompteClient client : comptes) {
-                    if (client.getNumero().equals(numCompteClient)) {
-                        for (CompteBancaire compte : client.getComptes()) {
-                            if (compte.getType() == TypeCompte.CHEQUE) {
-                                return compte.getNumero();
-
-                            }
-                        }
                     }
                 }
-                return "";
             }
+        }
+        return "";
     }
+    /**
+     * Vérifie dans la liste de compte-client si le compte client spécifié existe et vérifie si ce compte
+     * possède un compte bancaire du type spécifié.
+     *
+     * @param numeroCompteClient numéro du compte client.
+     * @param typeCompte         type de compte que l'on souhaite vérifier.
+     * @return true si le compte spécifié détient un compte bancaire du type spécifié.
+     */
+    public boolean verifSiDejaCompte(String numeroCompteClient, TypeCompte typeCompte) {
+        if (this.comptes.contains(getCompteClient(numeroCompteClient))) {
+            return getCompteClient(numeroCompteClient).verifTypeCompte(typeCompte);
+        } else {
+            return false;
+        }
+    }
+//Guillaume Chrétien-Richardson
 
-
-
+    /**
+     * @return
+     */
+    public String getNumCompteBancaireValide() {
+        boolean valide = false;
+        String numCompteBancaire = null;
+        while (!valide) {
+            numCompteBancaire = CompteBancaire.genereNouveauNumero();
+            for (com.atoudeft.banque.CompteClient compte : this.comptes) {
+                if (!compte.verifNumCompte(numCompteBancaire)) {
+                    valide = true;
+                }
+            }
+        }
+        return numCompteBancaire;
+    }
+//Guillaume Chrétien-Richardson
+}
