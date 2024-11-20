@@ -21,6 +21,23 @@ public class CompteClient implements Serializable {
         comptes = new ArrayList<>();
     }
 
+    // Getter pour le numéro de compte client
+    public String getNumero() {
+        return numero;
+    }
+
+    // Getter pour le nip
+    public String getNip() {
+        return nip;
+    }
+
+    // Getter pour accéder à la liste des comptes bancaires
+    public List<CompteBancaire> getComptes() {
+        return comptes;
+    }
+
+
+
     /**
      * Ajoute un compte bancaire au compte-client.
      *
