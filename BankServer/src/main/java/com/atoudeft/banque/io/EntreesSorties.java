@@ -1,6 +1,6 @@
 package com.atoudeft.banque.io;
 
-import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.*;
 
 import java.io.*;
 
