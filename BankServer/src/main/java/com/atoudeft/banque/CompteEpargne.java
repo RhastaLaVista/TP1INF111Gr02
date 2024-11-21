@@ -20,7 +20,7 @@ public class CompteEpargne extends CompteBancaire{
     @Override
     public boolean crediter(double montant) {
         if(montant > 0){
-            solde =  + montant; // jai mit solde en protected dans compteBancaire
+            solde += montant; // jai mit solde en protected dans compteBancaire
             return true;
         } else {
             return false;
@@ -31,12 +31,12 @@ public class CompteEpargne extends CompteBancaire{
     //de 1000$ dans le compte avant l’opération, on prélève des frais de 2$.
     @Override
     public boolean debiter(double montant) {
-        if(montant > 0 && solde - montant > 0){
-            if(solde < LIMITE_INFERIEURE){
-                solde = solde - PRELEVEMENT;
+        if(solde < LIMITE_INFERIEURE){
+            solde = solde - PRELEVEMENT;
+            if(montant > 0 && solde - montant > 0) {
+                solde = solde - montant;
+                return true;
             }
-            solde =  solde -montant;
-            return true;
         }
         return false;
     }

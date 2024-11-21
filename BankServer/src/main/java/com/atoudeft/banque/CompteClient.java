@@ -21,6 +21,7 @@ public class CompteClient implements Serializable {
         comptes = new ArrayList<>();
     }
 
+
     // Getter pour le numéro de compte client
     public String getNumero() {
         return numero;
@@ -36,7 +37,22 @@ public class CompteClient implements Serializable {
         return comptes;
     }
 
-
+    /**
+     *Chercheur de compte qui fouille comptes et retourne un index en prenant un numero de compte bancaire.
+     *
+     *@param numcompteActuel le numéro de compte que tu voudrais trouver dans la liste comptes
+     *@return le numéro de l'index de sa position dans l'arraylist comptes.
+     */
+    public int choixBancaire(String numcompteActuel) {
+        if (!comptes.isEmpty()) {
+            for (CompteBancaire compte : comptes) {
+                if (numcompteActuel.matches(compte.getNumero())) {
+                    return comptes.indexOf(compte);
+                }
+            }
+        }
+        return 0;//Si il surgit une problème, Il va prendre le premier compte dans la liste pour l'instant.
+        }
 
     /**
      * Ajoute un compte bancaire au compte-client.

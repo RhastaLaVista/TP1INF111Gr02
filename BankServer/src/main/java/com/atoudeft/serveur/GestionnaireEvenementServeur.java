@@ -123,6 +123,50 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
+                case "DEPOT":
+                    argument = evenement.getArgument();
+                    banque = serveurBanque.getBanque();
+                    int comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    double quantiteAjout = Double.parseDouble(String.format("%.2d",argument));
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).crediter(quantiteAjout);
+
+                    break;
+
+                case "RETRAIT":
+                    argument = evenement.getArgument();
+                    banque = serveurBanque.getBanque();
+                    comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    double quantiteRetrait = Double.parseDouble(String.format("%.2d",argument));
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).debiter(quantiteRetrait);
+
+                    break;
+                case "FACTURE":
+                    argument = evenement.getArgument();
+                    banque = serveurBanque.getBanque();
+                    comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    t = argument.split("\\s+");// Ce Regex sépare les
+                    double montantPaye = Double.parseDouble(String.format("%.2d",t[0]));
+                    String numero_facture = t[1];
+                    String Description = t[2];
+
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).payerFacture(numero_facture,montantPaye,Description);
+
+                    break;
+                case "TRANSFER" :
+                    argument = evenement.getArgument();
+                    banque = serveurBanque.getBanque();
+                    comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    t = argument.split("\\s+");// ce REGEX sépare l'argument à chaque espace incluent un tab. Si il y a problème à ce propos, Il est probablement ici.
+                    double montantTransfer = Double.parseDouble(String.format("%.2d",t[0]));
+                    String cible = t[1];
+
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,cible);
+
+                    break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
