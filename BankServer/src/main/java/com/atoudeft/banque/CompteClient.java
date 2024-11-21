@@ -66,4 +66,19 @@ public class CompteClient implements Serializable {
         }
         return false;
     }
+    //Guillaume Chrétien-Richardson
+    /**
+     * Retourne le numéro du compte bancaire du type spécifié d'un compte-client.
+     * @param typeCompte type du compte bancaire (CHEQUE ou EPARGNE)
+     * @return le numéro du compte bancaire
+     */
+    public String getNumCompteBancaire(TypeCompte typeCompte) {
+        for (CompteBancaire compte : comptes) {
+            if (compte.getType() == typeCompte) {
+                return compte.getNumero();
+            }
+        }
+        return null;
+    }
+
 }

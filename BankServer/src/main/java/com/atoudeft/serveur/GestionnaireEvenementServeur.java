@@ -60,17 +60,18 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque = serveurBanque.getBanque();
                     //vérification de si ce compte est déja connectée dans une autre instance de BankClient
                     for(Connexion cnected: serveur.connectes) {
-                        if (cnected instanceof ConnexionBanque
-                                && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
-                        ){
-                        cnx.envoyer("CONNECT NO");
+
+                        if (cnected instanceof ConnexionBanque && ((ConnexionBanque) cnected).getNumeroCompteClient() == null){
+                            cnx.envoyer("CONNECT NO");
                         }
+
+
                     }
                     //vérification des credentiels envoyés
                     if(banque.getCompteClient(numCompteClient) != null){
                         if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
-                        cnx.envoyer("CONNECT OK");
-                        cnx.setNumeroCompteClient(numCompteClient);
+                            cnx.envoyer("CONNECT OK");
+                            cnx.setNumeroCompteClient(numCompteClient);
                         }
                     }
 
@@ -100,7 +101,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         nip = t[1];
                         banque = serveurBanque.getBanque();
                         if (banque.ajouter(numCompteClient,nip)) {
-                            cnx.setNumeroCompteClient(numCompteClient);
+                            cnx.setNumeroCompteClient(numCompteClient); // on se connect quand on cree un compte ?
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                             cnx.envoyer("NOUVEAU OK " + t[0] + " cree");
                         }
@@ -110,17 +111,37 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 case "EPARGNE":
                     if(cnx.getNumeroCompteClient()!=null && !serveurBanque.getBanque().verifSiDejaCompte(cnx.getNumeroCompteClient(),TypeCompte.valueOf("EPARGNE"))){
-                       System.out.println("ON EST RENTRE DANS LE IF ÉPARGNE");
                         banque = serveurBanque.getBanque();
                         //creer on nouv compte ?
                         banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.EPARGNE,5));
                         //on send un msg ou non ?
                         cnx.envoyer("EPARGNE OK");
                     } else {
-                        System.out.println("ON EST PAS RENTRE DANS LE EPARGNE");
                         cnx.envoyer("EPARGNE NO");
                     }
                     break;
+                case "SELECT":
+                    if(cnx.getNumeroCompteClient()!=null){
+                        argument = evenement.getArgument();
+                        banque = serveurBanque.getBanque();
+                        cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
+                        cnx.envoyer("SELECT OK");
+                    } else {
+                        cnx.envoyer("SELECT NO");
+                    }
+                    break;
+
+
+
+
+
+
+
+
+
+
+
+
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();

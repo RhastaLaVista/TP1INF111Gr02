@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0968fcb0-73a1-430b-8789-b6593e556b37" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteEpargne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteEpargne.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +30,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -96,7 +92,7 @@
       <workItem from="1732196107826" duration="5002000" />
       <workItem from="1732201342080" duration="1523000" />
       <workItem from="1732203345079" duration="6478000" />
-      <workItem from="1732213892352" duration="4295000" />
+      <workItem from="1732213892352" duration="10691000" />
     </task>
     <servers />
   </component>
@@ -114,6 +110,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
