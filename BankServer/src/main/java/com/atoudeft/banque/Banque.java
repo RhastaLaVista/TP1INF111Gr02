@@ -10,11 +10,9 @@ public class Banque implements Serializable {
     private List<CompteClient> comptes;
 
     public Banque(String nom) {
-
         this.nom = nom;
         this.comptes = new ArrayList<>();
     }
-
     /**
      * Recherche un compte-client à partir de son numéro.
      *
@@ -22,14 +20,13 @@ public class Banque implements Serializable {
      * @return le compte-client s'il a été trouvé. Sinon, retourne null
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
-        CompteClient cpt = new CompteClient(numeroCompteClient, "");
-        int index = this.comptes.indexOf(cpt);
-        if (index != -1)
-            return this.comptes.get(index);
-        else
-            return null;
+        for (CompteClient compte : comptes) {
+            if(compte.getNumCompteClient().equals(numeroCompteClient)){
+                return compte;
+            }
+        }
+        return null;
     }
-
     /**
      * Vérifier qu'un compte-bancaire appartient bien au compte-client.
      *
@@ -87,13 +84,12 @@ public class Banque implements Serializable {
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
         return false;
     }
-
     /**
      * Crée un nouveau compte-client avec un numéro et un nip et l'ajoute à la liste des comptes.
      *
      * @param numCompteClient numéro du compte-client à créer
      * @param nip             nip du compte-client à créer
-     * @return true si le compte a été créé correctement
+     * @return true si le compte a été créé correctement, sinon retourne false.
      */
     public boolean ajouter(String numCompteClient, String nip) {
 
@@ -101,7 +97,6 @@ public class Banque implements Serializable {
         if (numCompteClient.length() < 6 || numCompteClient.length() > 8 || !numCompteClient.matches("[A-Z0-9]+")) {
             return false;
         }
-
         // Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres.
         if (nip.length() < 4 || nip.length() > 5 || !nip.matches("[0-9]+")) {
             return false;
@@ -112,33 +107,17 @@ public class Banque implements Serializable {
         } else {
             // 2. Créer un nouveau compte-client avec le numéro et le NIP
             CompteClient nouveauCompte = new CompteClient(numCompteClient, nip);
-
             // 3. Générer un nouveau numéro de compte bancaire
-            String numeroCompteBancaire = CompteBancaire.genereNouveauNumero();
-
             // 4. Vérifier si ce numéro existe déjà dans tous les comptes bancaires
-            for (CompteClient client : this.comptes) {
-                for (CompteBancaire compte : client.getComptes()) {
-                    if (compte.getNumero().equals(numeroCompteBancaire)) {
-                        return false;
-
-
-                    } else {
-                        // 5. Créer un compte-chèque avec ce numéro de compte bancaire
-                        CompteCheque compteCheque = new CompteCheque(numeroCompteBancaire, TypeCompte.CHEQUE);
-                        nouveauCompte.ajouter(compteCheque);
-
-                        // 6. Ajouter le compte-client à la liste des comptes de la banque
-                        this.comptes.add(nouveauCompte);
-
-                        // 7. Retourner true pour indiquer que l'ajout a réussi
-                        return true;
-                    }
-                }
-            }
-
+            String numeroCompteBancaire = getNumCompteBancaireValide();
+            // 5. Créer un compte-chèque avec ce numéro de compte bancaire
+            CompteCheque compteCheque = new CompteCheque(numeroCompteBancaire, TypeCompte.CHEQUE);
+            nouveauCompte.ajouter(compteCheque);
+            // 6. Ajouter le compte-client à la liste des comptes de la banque
+            this.comptes.add(nouveauCompte);
+            // 7. Retourner true pour indiquer que l'ajout a réussi
+            return true;
         }
-        return false;
     }
 
     /**
@@ -158,7 +137,7 @@ public class Banque implements Serializable {
                 }
             }
         }
-        return "";
+        return null;
     }
     /**
      * Vérifie dans la liste de compte-client si le compte client spécifié existe et vérifie si ce compte
@@ -175,23 +154,28 @@ public class Banque implements Serializable {
             return false;
         }
     }
-//Guillaume Chrétien-Richardson
-
+    //Guillaume Chrétien-Richardson
     /**
-     * @return
+     * Créer un numéro de compte-bancaire aléatoire, teste s'il existe déjà dans un compte-bancaire
+     * d'un compte-client dans la base de donnée de la banque.
+     * @return Un numéro de compte bancaire valide (unique).
      */
     public String getNumCompteBancaireValide() {
-        boolean valide = false;
+        boolean numCompteBancaireValide = true;
         String numCompteBancaire = null;
-        while (!valide) {
+
+        do {
             numCompteBancaire = CompteBancaire.genereNouveauNumero();
-            for (com.atoudeft.banque.CompteClient compte : this.comptes) {
-                if (!compte.verifNumCompte(numCompteBancaire)) {
-                    valide = true;
+            for (CompteClient compte : this.comptes) {
+                for(CompteBancaire comptes : compte.getComptes()){
+                    if (comptes.getNumero().equals(numCompteBancaire)) {
+                        numCompteBancaireValide = false;
+                    }
                 }
             }
-        }
+        } while (!numCompteBancaireValide);
         return numCompteBancaire;
     }
-//Guillaume Chrétien-Richardson
 }
+
+

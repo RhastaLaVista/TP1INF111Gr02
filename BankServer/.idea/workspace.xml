@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0968fcb0-73a1-430b-8789-b6593e556b37" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteEpargne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/CompteEpargne.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +30,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/RhastaLaVista/TP1INF111Gr02.git&quot;,
-    &quot;accountId&quot;: &quot;4b46897c-942e-453f-b493-c52b4528ec37&quot;
+    &quot;accountId&quot;: &quot;dd1e99a2-9681-4446-af2b-9b0654fa140e&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -45,12 +50,20 @@
     "Application.Unnamed.executor": "Run",
     "Application.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "guillaume",
+    "ignore.preview.features.used": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Ekrem Yoruk/OneDrive/Documents/TP1INF111Gr02/BankServer",
-    "project.structure.last.edited": "Modules",
+    "last_opened_file_path": "C:/Users/guill/OneDrive/Desktop/BankClient",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager">
@@ -64,6 +77,14 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -72,8 +93,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1730819921865</updated>
+      <workItem from="1732196107826" duration="5002000" />
+      <workItem from="1732201342080" duration="1523000" />
+      <workItem from="1732203345079" duration="6478000" />
+      <workItem from="1732213892352" duration="4295000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -81,6 +109,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="3" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

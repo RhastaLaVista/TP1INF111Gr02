@@ -66,18 +66,4 @@ public class CompteClient implements Serializable {
         }
         return false;
     }
-    //Guillaume Chrétien-Richardson
-    /**
-     *
-     * @param numCompteBancaire
-     * @return
-     */
-    public boolean verifNumCompte(String numCompteBancaire) {
-        for (CompteBancaire compte : comptes) {
-            if (compte.getNumero().equals(numCompteBancaire)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

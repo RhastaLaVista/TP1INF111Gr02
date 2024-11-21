@@ -9,9 +9,6 @@ import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
-import java.util.Collections;
-import java.util.ListIterator;
-
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
  * il crée un événement à partir du texte reçu et alerte ce gestionnaire qui réagit en gérant l'événement.
@@ -61,7 +58,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     nip = t[1];
 
                     banque = serveurBanque.getBanque();
-                    //vérification de si cette compte est déja connectée dans une autre instance de BankClient
+                    //vérification de si ce compte est déja connectée dans une autre instance de BankClient
                     for(Connexion cnected: serveur.connectes) {
                         if (cnected instanceof ConnexionBanque
                                 && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
@@ -113,16 +110,17 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 case "EPARGNE":
                     if(cnx.getNumeroCompteClient()!=null && !serveurBanque.getBanque().verifSiDejaCompte(cnx.getNumeroCompteClient(),TypeCompte.valueOf("EPARGNE"))){
+                       System.out.println("ON EST RENTRE DANS LE IF ÉPARGNE");
                         banque = serveurBanque.getBanque();
                         //creer on nouv compte ?
-                        banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.valueOf("EPARGNE"),5));
+                        banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.EPARGNE,5));
                         //on send un msg ou non ?
                         cnx.envoyer("EPARGNE OK");
                     } else {
+                        System.out.println("ON EST PAS RENTRE DANS LE EPARGNE");
                         cnx.envoyer("EPARGNE NO");
                     }
                     break;
-
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();

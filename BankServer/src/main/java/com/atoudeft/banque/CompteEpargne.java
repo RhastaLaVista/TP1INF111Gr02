@@ -20,7 +20,7 @@ public class CompteEpargne extends CompteBancaire{
     @Override
     public boolean crediter(double montant) {
         if(montant > 0){
-            solde =  + montant; // jai mit solde en protected dans compteBancaire
+            solde = + montant; // jai mit solde en protected dans compteBancaire
             return true;
         } else {
             return false;
