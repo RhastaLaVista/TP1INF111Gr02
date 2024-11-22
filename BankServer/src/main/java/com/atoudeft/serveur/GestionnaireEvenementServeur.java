@@ -374,6 +374,19 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                 cnx.envoyer("TRANSFER NO Compte-client non trouvé");
                             }
                             break;
+
+                case "HIST":
+                    banque = serveurBanque.getBanque();
+                    int comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique();
+
+                    //pour chaque opérations, Il va imprimer le toString de tout ce qui hérite de Opération.
+                    for(Operation op:banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique()){
+                        cnx.envoyer(op.toString());
+                        cnx.envoyer("");
+                    }
+                    break;
                         /******************* TRAITEMENT PAR DÉFAUT *******************/
                         default: //Renvoyer le texte recu convertit en majuscules :
                             msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
