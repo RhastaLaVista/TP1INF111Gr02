@@ -18,7 +18,11 @@ import java.util.Objects;
  * @since 2024-08-20
  */
 public class ServeurBanque extends Serveur {
-    public static final int DELAI_INACTIVITE = 30000;
+    //Delai inactivité pour tester sans déconnection.
+    static int DELAI_TEST_VALUE = 999999999;
+    //
+    public static final int DELAI_INACTIVITE = DELAI_TEST_VALUE;/*30000;*/
+
     //Référence vers la banque gérée par ce serveur :
     private Banque banque;
     //Thread qui supprime les connexions inactives :

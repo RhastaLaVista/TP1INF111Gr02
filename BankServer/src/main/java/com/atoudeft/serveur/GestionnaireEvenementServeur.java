@@ -53,32 +53,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             cnx.setTempsDerniereOperation(System.currentTimeMillis());
             switch (typeEvenement) {
                 /******************* COMMANDES GÉNÉRALES *******************/
-                case "CONNECT":
-                    argument = evenement.getArgument();
-                    t = argument.split(":");
 
-                    numCompteClient = t[0];
-                    nip = t[1];
-
-                    banque = serveurBanque.getBanque();
-                    //vérification de si cette compte est déja connectée dans une autre instance de BankClient
-                    for(Connexion cnected: serveur.connectes) {
-                        if (cnected instanceof ConnexionBanque
-                                && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
-                        ){
-                        cnx.envoyer("CONNECT NO");
-                        }
-                    }
-                    //vérification des credentiels envoyés
-                    if(banque.getCompteClient(numCompteClient) != null){
-                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
-                        cnx.envoyer("CONNECT OK");
-                        cnx.setNumeroCompteClient(numCompteClient);
-                        }
-                    }
-
-                    //
-                    break;
                 case "EXIT": //Ferme la connexion avec le client qui a envoyé "EXIT":
                     cnx.envoyer("END");
                     serveurBanque.enlever(cnx);
@@ -105,7 +80,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         if (banque.ajouter(numCompteClient,nip)) {
                             cnx.setNumeroCompteClient(numCompteClient);
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
-                            cnx.envoyer("NOUVEAU OK " + t[0] + " cree");
+                            cnx.envoyer("NOUVEAU OK "+ t[0] +" cree");
                         }
                         else
                             cnx.envoyer("NOUVEAU NO "+t[0]+" existe");
@@ -121,6 +96,34 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     } else {
                         cnx.envoyer("EPARGNE NO");
                     }
+                    break;
+                case "CONNECT":
+                    argument = evenement.getArgument();
+                    t = argument.split(":");
+
+                    numCompteClient = t[0];
+                    nip = t[1];
+
+                    banque = serveurBanque.getBanque();
+                    //vérification de si cette compte est déja connectée dans une autre instance de BankClient dans la liste de connectes.
+                    if(!serveur.connectes.contains(numCompteClient)){
+                        for (Connexion cnected : serveur.connectes) {
+                            if (cnected instanceof ConnexionBanque
+                                    && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
+
+                            ) {
+                                cnx.envoyer("CONNECT NO");
+                            }
+                        }
+                    }
+                    //vérification des credentiels envoyés
+                    if(banque.getCompteClient(numCompteClient) != null){
+                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
+                            cnx.envoyer("CONNECT OK");
+                            cnx.setNumeroCompteClient(numCompteClient);
+                        }
+                    }
+                    //
                     break;
 
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
