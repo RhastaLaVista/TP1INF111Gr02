@@ -1,11 +1,12 @@
 package com.atoudeft.banque;
 
+import java.util.Calendar;
+
 public abstract class Operation {
-
-    
     //date d'operation
+    
     //type d'operation
-
+    TypeOperation type;
 
     //methods:
     public Operation(double montant){}//retrait & depot constructor
