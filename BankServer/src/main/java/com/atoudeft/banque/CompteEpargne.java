@@ -21,7 +21,7 @@ public class CompteEpargne extends CompteBancaire{
     public boolean crediter(double montant) {
         if(montant > 0){
             solde += montant; // jai mit solde en protected dans compteBancaire
-            this.historique.add(new OperationDepot(montant,TypeOperation.DEPOT));
+            this.getHistorique().add(new OperationDepot(montant,TypeOperation.DEPOT));
             return true;
         } else {
             return false;
@@ -44,13 +44,13 @@ public class CompteEpargne extends CompteBancaire{
 
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        this.historique.add(new OperationFacture(montant,com.atoudeft.banque.TypeOperation.FACTURE,numeroFacture,description));
+        this.getHistorique().add(new OperationFacture(montant,com.atoudeft.banque.TypeOperation.FACTURE,numeroFacture,description));
         return false;
     }
 
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
-        this.historique.add(new OperationTransfer(montant,TypeOperation.TRANSFER,numeroCompteDestinataire));
+        this.getHistorique().add(new OperationTransfer(montant,TypeOperation.TRANSFER,numeroCompteDestinataire));
         return false;
     }
 

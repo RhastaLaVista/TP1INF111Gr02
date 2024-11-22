@@ -2,6 +2,7 @@ package com.atoudeft.serveur;
 
 import com.atoudeft.banque.Banque;
 import com.atoudeft.banque.CompteEpargne;
+import com.atoudeft.banque.Operation;
 import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
@@ -177,11 +178,18 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,cible);
 
                     break;
+
                 case "HIST":
                     banque = serveurBanque.getBanque();
                     comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
 
-                    
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique();
+
+                    //pour chaque opérations, Il va imprimer le toString de tout ce qui hérite de Opération.
+                    for(Operation op:banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique()){
+                        cnx.envoyer(op.toString());
+                        cnx.envoyer("");
+                    }
                     break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :

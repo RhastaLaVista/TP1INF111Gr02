@@ -7,7 +7,7 @@ public abstract class CompteBancaire implements Serializable {
     private String numero;
     private TypeCompte type;
     protected double solde;
-    LinkedList<Operation> historique;
+    private LinkedList<Operation> historique;
     /**
      * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
      * majuscule et 0 est un chiffre entre 0 et 9.
@@ -34,7 +34,10 @@ public abstract class CompteBancaire implements Serializable {
         this.numero = numero;
         this.type = type;
         this.solde = 0;
+        historique = new LinkedList<>();
     }
+
+    public LinkedList<Operation> getHistorique() {return historique;}
     public String getNumero() {
         return numero;
     }
