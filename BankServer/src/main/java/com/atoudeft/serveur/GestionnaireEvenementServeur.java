@@ -9,9 +9,6 @@ import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
-import java.util.Collections;
-import java.util.ListIterator;
-
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
  * il crée un événement à partir du texte reçu et alerte ce gestionnaire qui réagit en gérant l'événement.
@@ -54,6 +51,29 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             switch (typeEvenement) {
                 /******************* COMMANDES GÉNÉRALES *******************/
 
+                    numCompteClient = t[0];
+                    nip = t[1];
+
+                    banque = serveurBanque.getBanque();
+                    //vérification de si ce compte est déja connectée dans une autre instance de BankClient
+                    for(Connexion cnected: serveur.connectes) {
+
+                        if (cnected instanceof ConnexionBanque && ((ConnexionBanque) cnected).getNumeroCompteClient() == null){
+                            cnx.envoyer("CONNECT NO");
+                        }
+
+
+                    }
+                    //vérification des credentiels envoyés
+                    if(banque.getCompteClient(numCompteClient) != null){
+                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
+                            cnx.envoyer("CONNECT OK");
+                            cnx.setNumeroCompteClient(numCompteClient);
+                        }
+                    }
+
+                    //
+                    break;
                 case "EXIT": //Ferme la connexion avec le client qui a envoyé "EXIT":
                     cnx.envoyer("END");
                     serveurBanque.enlever(cnx);
@@ -78,7 +98,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         nip = t[1];
                         banque = serveurBanque.getBanque();
                         if (banque.ajouter(numCompteClient,nip)) {
-                            cnx.setNumeroCompteClient(numCompteClient);
+                            cnx.setNumeroCompteClient(numCompteClient); // on se connect quand on cree un compte ?
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                             cnx.envoyer("NOUVEAU OK "+ t[0] +" cree");
                         }
@@ -90,16 +110,34 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     if(cnx.getNumeroCompteClient()!=null && !serveurBanque.getBanque().verifSiDejaCompte(cnx.getNumeroCompteClient(),TypeCompte.valueOf("EPARGNE"))){
                         banque = serveurBanque.getBanque();
                         //creer on nouv compte ?
-                        banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.valueOf("EPARGNE"),5));
+                        banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.EPARGNE,5));
                         //on send un msg ou non ?
                         cnx.envoyer("EPARGNE OK");
                     } else {
                         cnx.envoyer("EPARGNE NO");
                     }
                     break;
-                case "CONNECT":
-                    argument = evenement.getArgument();
-                    t = argument.split(":");
+                case "SELECT":
+                    if(cnx.getNumeroCompteClient()!=null){
+                        argument = evenement.getArgument();
+                        banque = serveurBanque.getBanque();
+                        cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
+                        cnx.envoyer("SELECT OK");
+                    } else {
+                        cnx.envoyer("SELECT NO");
+                    }
+                    break;
+
+
+
+
+
+
+
+
+
+
+
 
                     numCompteClient = t[0];
                     nip = t[1];
