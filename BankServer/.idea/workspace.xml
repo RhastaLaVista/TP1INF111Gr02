@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0968fcb0-73a1-430b-8789-b6593e556b37" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/banque/Banque.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/atoudeft/serveur/GestionnaireEvenementServeur.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,6 +13,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="guillaume-new" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -97,6 +99,7 @@
       <workItem from="1732233747417" duration="1014000" />
       <workItem from="1732238884233" duration="3606000" />
       <workItem from="1732278672240" duration="3205000" />
+      <workItem from="1732284964644" duration="444000" />
     </task>
     <servers />
   </component>

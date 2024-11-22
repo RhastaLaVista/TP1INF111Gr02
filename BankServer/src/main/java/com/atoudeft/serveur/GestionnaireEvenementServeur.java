@@ -59,7 +59,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     boolean dejaConnecte = false;
                     //On vérifie si le compte existe.
                     if(banque.compteExiste(numCompteClient)){
-
                         //vérification de si ce compte est déja connectée dans une autre instance de BankClient
                         for(Connexion connected: serveur.connectes) {
                             if(((ConnexionBanque)connected).getNumeroCompteClient() != null){
@@ -130,11 +129,13 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     if(cnx.getNumeroCompteClient()!=null){
                         argument = evenement.getArgument();
                         banque = serveurBanque.getBanque();
-                        cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
-                        cnx.envoyer("SELECT OK");
-                    } else {
-                        cnx.envoyer("SELECT NO");
-                    }
+                        if(banque.getCompteClient(cnx.getNumeroCompteClient()).verifTypeCompte(TypeCompte.EPARGNE)){
+                            cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
+                            cnx.envoyer("SELECT OK");
+                            break;
+                        }
+                    } 
+                    cnx.envoyer("SELECT NO");
                     break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
