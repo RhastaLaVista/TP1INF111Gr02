@@ -102,7 +102,7 @@ public class Banque implements Serializable {
             return false;
         }
         // 1. Vérifier si le numéro du compte-client existe déjà
-        if (this.comptes.contains(numCompteClient)) {
+        if (compteExiste(numCompteClient)){
             return false; // Si le compte-client existe déjà, retourner false
         } else {
             // 2. Créer un nouveau compte-client avec le numéro et le NIP
@@ -175,6 +175,20 @@ public class Banque implements Serializable {
             }
         } while (!numCompteBancaireValide);
         return numCompteBancaire;
+    }
+    //Guillaume Chrétien-Richardson
+    /**
+     * Vérifie si le compte existe dans la base de donnée de la banque à partir du numéro de compte-client.
+     * @param numCompteClient numéro du compte client.
+     * @return true si le compte est trouvé, false sinon.
+     */
+    public boolean compteExiste(String numCompteClient) {
+        for (CompteClient compte : comptes) {
+            if (compte.getNumCompteClient().equals(numCompteClient)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

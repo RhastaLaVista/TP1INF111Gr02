@@ -56,26 +56,33 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     t = argument.split(":");
                     numCompteClient = t[0];
                     nip = t[1];
-
                     banque = serveurBanque.getBanque();
-                    //vérification de si ce compte est déja connectée dans une autre instance de BankClient
-                    for(Connexion cnected: serveur.connectes) {
-
-                        if (cnected instanceof ConnexionBanque && ((ConnexionBanque) cnected).getNumeroCompteClient() == null){
+                    boolean dejaConnecte = false;
+                    //On vérifie si le compte existe.
+                    if(banque.compteExiste(numCompteClient)){
+                        //vérification de si ce compte est déja connectée dans une autre instance de BankClient
+                        for(Connexion connected: serveur.connectes) {
+                            if(((ConnexionBanque)connected).getNumeroCompteClient() != null){
+                                if ((connected instanceof ConnexionBanque && ((ConnexionBanque)connected).getNumeroCompteClient().equals(numCompteClient))) {
+                                    System.out.println("deja connecte ailleurs");
+                                    cnx.envoyer("CONNECT NO");
+                                    dejaConnecte = true;
+                                }
+                            }
+                        }
+                        if (!dejaConnecte) {
+                            //vérification des credentiels envoyés.
+                            if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
+                                cnx.envoyer("CONNECT OK");
+                                cnx.setNumeroCompteClient(numCompteClient);
+                                cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
+                            }
                             cnx.envoyer("CONNECT NO");
                         }
-
-
+                    } else {
+                        System.out.println("Le compte existe pas dans le systeme");
+                        cnx.envoyer("CONNECT NO");
                     }
-                    //vérification des credentiels envoyés
-                    if(banque.getCompteClient(numCompteClient) != null){
-                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
-                            cnx.envoyer("CONNECT OK");
-                            cnx.setNumeroCompteClient(numCompteClient);
-                        }
-                    }
-
-                    //
                     break;
                 case "EXIT": //Ferme la connexion avec le client qui a envoyé "EXIT":
                     cnx.envoyer("END");
@@ -101,20 +108,19 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         nip = t[1];
                         banque = serveurBanque.getBanque();
                         if (banque.ajouter(numCompteClient,nip)) {
-                            cnx.setNumeroCompteClient(numCompteClient); // on se connect quand on cree un compte ?
+                            cnx.setNumeroCompteClient(numCompteClient);
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                             cnx.envoyer("NOUVEAU OK "+ t[0] +" cree");
                         }
                         else
-                            cnx.envoyer("NOUVEAU NO "+t[0]+" existe");
+                            cnx.envoyer("NOUVEAU NO "+t[0]+" existe deja");
                     }
                     break;
                 case "EPARGNE":
                     if(cnx.getNumeroCompteClient()!=null && !serveurBanque.getBanque().verifSiDejaCompte(cnx.getNumeroCompteClient(),TypeCompte.valueOf("EPARGNE"))){
                         banque = serveurBanque.getBanque();
-                        //creer on nouv compte ?
+                        //creer on nouv compte bancaire
                         banque.getCompteClient(cnx.getNumeroCompteClient()).ajouter(new CompteEpargne(banque.getNumCompteBancaireValide(),TypeCompte.EPARGNE,5));
-                        //on send un msg ou non ?
                         cnx.envoyer("EPARGNE OK");
                     } else {
                         cnx.envoyer("EPARGNE NO");
@@ -124,11 +130,13 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     if(cnx.getNumeroCompteClient()!=null){
                         argument = evenement.getArgument();
                         banque = serveurBanque.getBanque();
-                        cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
-                        cnx.envoyer("SELECT OK");
-                    } else {
-                        cnx.envoyer("SELECT NO");
-                    }
+                        if(banque.getCompteClient(cnx.getNumeroCompteClient()).verifTypeCompte(TypeCompte.EPARGNE)){
+                            cnx.setNumeroCompteActuel(banque.getCompteClient(cnx.getNumeroCompteClient()).getNumCompteBancaire(TypeCompte.valueOf(argument)));
+                            cnx.envoyer("SELECT OK");
+                            break;
+                        }
+                    } 
+                    cnx.envoyer("SELECT NO");
                     break;
 
                 case "DEPOT":
