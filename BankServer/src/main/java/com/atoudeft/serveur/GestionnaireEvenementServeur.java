@@ -50,7 +50,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             cnx.setTempsDerniereOperation(System.currentTimeMillis());
             switch (typeEvenement) {
                 /******************* COMMANDES GÉNÉRALES *******************/
-
+                case "CONNECT":
+                    argument = evenement.getArgument();
+                    t = argument.split(":");
                     numCompteClient = t[0];
                     nip = t[1];
 
@@ -128,42 +130,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
-
-
-
-
-
-
-
-
-
-
-
-                    numCompteClient = t[0];
-                    nip = t[1];
-
-                    banque = serveurBanque.getBanque();
-                    //vérification de si cette compte est déja connectée dans une autre instance de BankClient dans la liste de connectes.
-                    if(!serveur.connectes.contains(numCompteClient)){
-                        for (Connexion cnected : serveur.connectes) {
-                            if (cnected instanceof ConnexionBanque
-                                    && ((ConnexionBanque) cnected).getNumeroCompteClient().matches(numCompteClient)
-
-                            ) {
-                                cnx.envoyer("CONNECT NO");
-                            }
-                        }
-                    }
-                    //vérification des credentiels envoyés
-                    if(banque.getCompteClient(numCompteClient) != null){
-                        if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
-                            cnx.envoyer("CONNECT OK");
-                            cnx.setNumeroCompteClient(numCompteClient);
-                        }
-                    }
-                    //
-                    break;
-
                 case "DEPOT":
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
@@ -183,6 +149,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).debiter(quantiteRetrait);
 
                     break;
+
                 case "FACTURE":
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
@@ -196,6 +163,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).payerFacture(numero_facture,montantPaye,Description);
 
                     break;
+
                 case "TRANSFER" :
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
@@ -209,6 +177,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,cible);
 
                     break;
+
+
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();

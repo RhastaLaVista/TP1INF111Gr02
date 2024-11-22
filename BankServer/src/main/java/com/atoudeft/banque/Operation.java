@@ -2,6 +2,7 @@ package com.atoudeft.banque;
 
 public abstract class Operation {
 
+    
     //date d'operation
     //type d'operation
 
