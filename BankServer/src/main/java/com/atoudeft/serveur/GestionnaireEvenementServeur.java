@@ -164,6 +164,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     double montantTransfer = Double.parseDouble(String.format("%.2d",t[0]));
                     String cible = t[1];
 
+                    
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,cible);
 
                     break;
