@@ -177,8 +177,12 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,cible);
 
                     break;
+                case "HIST":
+                    banque = serveurBanque.getBanque();
+                    comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
 
-
+                    
+                    break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
