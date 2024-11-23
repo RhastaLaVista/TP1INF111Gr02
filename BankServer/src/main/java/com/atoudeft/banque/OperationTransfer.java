@@ -9,8 +9,8 @@ public class OperationTransfer extends Operation{
     @Override
     public String toString() {
         return " DATE " + super.getDate() +
-                " TYPE " + type +
-                " MONTANT " + montant+
-                " NUM DESTINATAIRE " + numdestinataire;
+                "\n TYPE " + type +
+                "\n MONTANT " + montant+
+                "\n NUM DESTINATAIRE " + numdestinataire;
     }
 }

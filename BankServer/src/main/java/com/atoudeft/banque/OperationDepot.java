@@ -8,7 +8,7 @@ public class OperationDepot extends Operation{
     @Override
     public String toString() {
         return  "DATE" + super.getDate() +
-                "TYPE " + type +
-                "MONTANT " + montant;
+                "\n TYPE " + type +
+                "\n MONTANT " + montant;
     }
 }

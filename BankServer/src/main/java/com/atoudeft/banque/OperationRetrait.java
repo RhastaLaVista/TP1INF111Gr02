@@ -7,8 +7,8 @@ public class OperationRetrait extends Operation {
 
     @Override
     public String toString() {
-        return " DATE " + super.getDate() +
-                " TYPE " + type +
-                " MONTANT " + montant;
+        return "  DATE " + super.getDate() +
+                "\n TYPE " + type +
+                "\n MONTANT " + montant;
     }
 }

@@ -277,6 +277,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                         for(CompteBancaire comptes : compte.getComptes()){
                                             if (comptes.getNumero().equals(numeroCompteBanqueDestinataire)) {
                                                 if(banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,numeroCompteBanqueDestinataire))
+
                                                     cnx.envoyer("TRANSFER OK "+ montantTransfer+"ENVOYE");
                                                     break;
                                                 }

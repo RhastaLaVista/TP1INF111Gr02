@@ -13,9 +13,9 @@ public class OperationFacture extends Operation{
     @Override
     public String toString() {
         return "DATE" + super.getDate() +
-                "TYPE " + type +
-                "MONTANT " + montant+
-                "numFacture "+ numFacture+
-                "descFacture "+ descFacture;
+                "\nTYPE " + type +
+                "\nMONTANT " + montant+
+                "\nnumFacture "+ numFacture+
+                "\ndescFacture "+ descFacture;
     }
 }
