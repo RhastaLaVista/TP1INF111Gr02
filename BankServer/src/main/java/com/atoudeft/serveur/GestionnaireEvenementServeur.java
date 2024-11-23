@@ -161,14 +161,14 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             // Effectuer le dépôt
                             boolean depotReussi = banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).crediter(montant);
                             if (depotReussi) {
-                                cnx.envoyer("DEPOT OK! Montant déposé : " + montant);
+                                cnx.envoyer("DEPOT OK : " + montant);
                                 break;
                             } else {
-                                cnx.envoyer("DEPOT NO!! Impossible de créditer ce compte.");
+                                cnx.envoyer("DEPOT NO");
                                 break;
                             }
                         } else {
-                            cnx.envoyer("DEPOT NO!! Compte-client non trouvé.");
+                            cnx.envoyer("DEPOT NO");
                             break;
                         }
 
@@ -181,7 +181,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                         // Vérification si le montant est positif
                         if (montantRetraite <= 0) {
-                            cnx.envoyer("RETRAIT NO!! Montant invalide, doit être positif");
+                            cnx.envoyer("RETRAIT NO");
                             break;
                         }
                         // Récupération de la banque et des informations du client
@@ -197,9 +197,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                                     // Tentative de retrait
                                     if (banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).debiter(montantRetraite)) {
-                                        cnx.envoyer("RETRAIT OK Montant retiré : " + (montantRetraite - (banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante) instanceof CompteEpargne ? 2.0 : 0)));
+                                        cnx.envoyer("RETRAIT OK  : " + (montantRetraite - (banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante) instanceof CompteEpargne ? 2.0 : 0)));
                                     } else {
-                                        cnx.envoyer("RETRAIT NO Échec du retrait, fonds insuffisants");
+                                        cnx.envoyer("RETRAIT NO ");
                                     }break;
 
                 case "FACTURE": // Permet au client de payer une facture.
@@ -210,7 +210,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     // Vérification du format de la commande (au moins montant, numéro de facture, description)
                     if (t.length < 3) {
-                        cnx.envoyer("FACTURE NO!! Format incorrect");
+                        cnx.envoyer("FACTURE NO");
                         break;
                     }
                         // Extraction des parties
@@ -220,7 +220,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                         // Vérifier que le montant est valide (positif)
                         if (montantFacture <= 0) {
-                            cnx.envoyer("FACTURE NO!! Montant invalide, doit être positif");
+                            cnx.envoyer("FACTURE NO");
                             break;
                         }
 
@@ -243,7 +243,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     // Vérifie que l'entrée contient bien un montant et un numéro de compte
                     if (t.length < 2) {
-                        cnx.envoyer("TRANSFER NO Format incorrect. Utilisez : TRANSFER montant numéro-compte");
+                        cnx.envoyer("TRANSFER NO FORMAT INCORRECT. FORMAT : TRANSFER montant numéro-compte");
                         break;
                     }
 
@@ -253,7 +253,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                         // Vérifie que le montant est positif
                         if (montantTransfer <= 0) {
-                            cnx.envoyer("TRANSFER NO Montant invalide. Il doit être strictement positif.");
+                            cnx.envoyer("TRANSFER NO Montant invalide");
                             break;
                         }
 

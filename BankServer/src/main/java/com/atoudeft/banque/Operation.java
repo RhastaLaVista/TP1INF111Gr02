@@ -1,14 +1,13 @@
 package com.atoudeft.banque;
 
 import java.io.Serializable;
-import java.util.Calendar;
+
 import java.util.Date;
+
 
 public abstract class Operation implements Serializable {
     //date d'operation
-    private Calendar calendar;
-    private long timemillis = calendar.getTimeInMillis();
-    private Date date = new Date(timemillis);
+    private Date date = new Date();
 
     //type d'operation
     TypeOperation type;
@@ -20,21 +19,21 @@ public abstract class Operation implements Serializable {
     {
         this.montant = montant;
         this.type = type;
-        this.date = date;
+
     }//retrait & depot constructor
 
     public Operation(double montant, TypeOperation type, String numeroDestinataire)
     {
         this.montant = montant;
         this.type = type;
-        this.date = date;
+
     }//transferconstructor
 
     public Operation(double montant, TypeOperation type, String numFacture, String descFacture)
     {
         this.montant = montant;
         this.type = type;
-        this.date = date;
+
     }//factureConstructor
 
     public Date getDate() {
