@@ -13,12 +13,21 @@ public class CompteCheque extends com.atoudeft.banque.CompteBancaire {
 
     @Override
     public boolean crediter(double montant) {
-        return false;
+        if (montant <= 0) {
+            return false;
+        } else {
+            solde = +montant;
+            return true;
+        }
     }
 
     @Override
     public boolean debiter(double montant) {
-        return false;
+        if (montant <= 0) {
+            return false;
+        }
+        solde = -montant;
+        return true;
     }
 
     @Override
