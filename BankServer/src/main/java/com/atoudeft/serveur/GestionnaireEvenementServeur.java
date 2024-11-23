@@ -129,135 +129,141 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     } else {
                         cnx.envoyer("SELECT NO");
                     }
-                        break;
-                        case "DEPOT": // permettre au client de créditer son compte.
-                            argument = evenement.getArgument();
-                            try {
-                                cnx.envoyer("DEPOT: " + argument);
-                                // conversion du montant en float
-                                Float montant = Float.valueOf(argument);
-                                // Vérifier si le montant est valide (positif)
-                                if (montant <= 0) {
-                                    System.out.println(montant);
-                                    cnx.envoyer("DEPOT NO Montant invalide");
-                                } else {
-                                    // Trouver le compte du client à partir du numéro de compte-client
-                                    Banque banqueDepot = ((ServeurBanque) serveur).getBanque();
-                                    String numCompteClientDepot = cnx.getNumeroCompteClient();
-                                    if (numCompteClientDepot != null) {
-                                        // Effectuer le dépôt sur le compte
-                                        if (banqueDepot.deposer(montant.doubleValue(), numCompteClientDepot)) {
-                                            cnx.envoyer("DEPOT OK Montant déposé : " + montant);
-                                        } else {
-                                            cnx.envoyer("DEPOT NO Échec du dépôt");
-                                        }
-                                    } else {
-                                        cnx.envoyer("DEPOT NO Compte-client non trouvé");
-                                    }
-                                }
-                            } catch (NumberFormatException e) {
-                                // Si l'argument ne peut pas être converti en nombre
-                                cnx.envoyer("DEPOT NO Montant invalide");
-                            }
+                    break;
+                case "DEPOT": // permettre au client de créditer son compte.
+                     argument = evenement.getArgument();
+                     try {
+                         cnx.envoyer("DEPOT: " + argument);
+                         // conversion du montant en double
+                         double montant = Double.parseDouble(argument);
+                         // Vérifier si le montant est valide (positif)
+                         if (montant <= 0) {
+                             cnx.envoyer("DEPOT NO! Montant invalide");
+                         } else {
+                             // Trouver le compte du client à partir du numéro de compte-client
+                             Banque banqueDepot = ((ServeurBanque) serveur).getBanque();
+                             String numCompteClientDepot = cnx.getNumeroCompteClient();
+                             if (numCompteClientDepot != null) {
+                                 // Effectuer le dépôt sur le compte
+                                 if (banqueDepot.deposer(montant, numCompteClientDepot)) {
+                                     cnx.envoyer("DEPOT OK! Montant depose : " + montant);
+                                 } else {
+                                     cnx.envoyer("DEPOT NO!! Echec du depot");
+                                 }
+                             } else {
+                                 cnx.envoyer("DEPOT NO!! Compte-client non trouve");
+                             }
+                         }
+                     } catch (NumberFormatException e) {
+                         // Si l'argument ne peut pas être converti en nombre
+                         cnx.envoyer("DEPOT NO!! Montant invalide");
+                     }
+                     break;
+
+                case "RETRAIT": // Permet au client de débiter son compte.
+                    argument = evenement.getArgument();
+                    try {
+                        // Conversion de l'argument en montant (double)
+                        double montant;
+                        try {
+                            montant = Double.parseDouble(argument);
+                        } catch (NumberFormatException e) {
+                            cnx.envoyer("RETRAIT NO!! Montant invalide");
                             break;
+                        }
 
-                        case "RETRAIT":
-                            // Récupérer l'argument, qui est le montant à retirer
-                            argument = evenement.getArgument();
-                            try {
-                                // Validation de l'argument directement dans le code
-                                Float montant = null;
-                                try {
-                                    montant = Float.valueOf(argument);
-                                } catch (NumberFormatException e) {
-                                    cnx.envoyer("RETRAIT NO Montant invalide");
-                                    break; // Si le montant n'est pas valide, sortir du case
-                                }
-
-                                // Vérifier que le montant est valide (positif)
-                                if (montant <= 0) {
-                                    cnx.envoyer("RETRAIT NO Montant invalide, doit être positif");
-                                    break;
-                                }
-
-                                // Trouver le compte client à partir du numéro de compte-client
-                                Banque banqueRetrait = ((ServeurBanque) serveur).getBanque();
-                                String numCompteClientRetrait = cnx.getNumeroCompteClient();
-
-                                if (numCompteClientRetrait != null) {
-                                    // Chercher le compte client à partir de la liste des comptes
-                                    CompteClient compteClient = banqueRetrait.getCompteClient(numCompteClientRetrait);
-                                    if (compteClient != null) {
-                                        String numeroCompteActuel = cnx.getNumeroCompteActuel();
-                                        CompteBancaire compteActuel = null;
-
-                                        // Parcours des comptes pour trouver celui qui correspond au numéro actuel
-                                        for (CompteBancaire compte : compteClient.getComptes()) {
-                                            if (compte.getNumero().equals(numeroCompteActuel)) {
-                                                compteActuel = compte;
-                                                break;
-                                            }
-                                        }
-
-                                        if (compteActuel != null) {
-                                            // Si le compte est un compte épargne, appliquer des frais
-                                            if (compteActuel.getType() == TypeCompte.EPARGNE) {
-                                                float frais = 5.0F; // Exemple de frais fixes
-                                                montant += frais; // Ajouter les frais au montant
-                                                cnx.envoyer("RETRAIT AVERTISSEMENT Des frais de " + frais + " seront appliqués pour le retrait");
-                                            }
-
-                                            // Effectuer le retrait
-                                            if (banqueRetrait.retirer(montant.doubleValue(), numCompteClientRetrait)) {
-                                                cnx.envoyer("RETRAIT OK Montant retiré : " + montant);
-                                            } else {
-                                                cnx.envoyer("RETRAIT NO Échec du retrait, fonds insuffisants ou autre erreur");
-                                            }
-                                        } else {
-                                            cnx.envoyer("RETRAIT NO Compte sélectionné non trouvé");
-                                        }
-                                    } else {
-                                        cnx.envoyer("RETRAIT NO Compte-client non trouvé");
-                                    }
-                                } else {
-                                    cnx.envoyer("RETRAIT NO Compte-client non trouvé");
-                                }
-                            } catch (Exception e) {
-                                cnx.envoyer("RETRAIT NO Une erreur est survenue");
-                            }
+                        // Vérification si le montant est positif
+                        if (montant <= 0) {
+                            cnx.envoyer("RETRAIT NO!! Montant invalide, doit être positif");
                             break;
-                        case "FACTURE":
-                            argument = evenement.getArgument(); // Récupère l'argument (montant NUMFACT Description)
-                            String[] parts = argument.split(" "); // Divise l'argument en parties (montant, NUMFACT, Description)
+                        }
 
-                            // Vérifie si l'argument contient au moins 3 éléments
-                            if (parts.length < 3) {
-                                cnx.envoyer("FACTURE NO Format incorrect");
-                                break;
-                            }
+                        // Récupération de la banque et des informations du client
+                        Banque banqueRetrait = ((ServeurBanque) serveur).getBanque();
+                        String numCompteClientRetrait = cnx.getNumeroCompteClient();
 
-                            // Récupère les valeurs
-                            float montant = Float.parseFloat(parts[0]); // Montant de la facture
-                            String numeroFacture = parts[1]; // Numéro de la facture
-                            String description = String.join(" ", java.util.Arrays.copyOfRange(parts, 2, parts.length)); // Description de la facture
+                        if (numCompteClientRetrait != null) {
+                            CompteClient compteClient = banqueRetrait.getCompteClient(numCompteClientRetrait);
 
-                            // Vérifie si le montant est valide
-                            if (montant <= 0) {
-                                cnx.envoyer("FACTURE NO Montant invalide");
-                                break;
-                            }
-
-                            // Utiliser la variable serveurBanque déjà déclarée pour accéder à la banque
-                            Banque banqueFacture = serveurBanque.getBanque(); // Obtenir la banque
-
-                            // Vérifie le compte du client
-                            String numCompteClientFacture = cnx.getNumeroCompteClient();
-                            if (numCompteClientFacture != null) {
-                                String numeroCompteActuelFacture = cnx.getNumeroCompteActuel();
-                                CompteClient compteClient = banqueFacture.getCompteClient(numCompteClientFacture);
-
-                                // Parcourt les comptes pour trouver celui qui correspond au compte actuel
+                            if (compteClient != null) {
+                                // Récupération du compte bancaire actif
+                                String numeroCompteActuel = cnx.getNumeroCompteActuel();
                                 CompteBancaire compteActuel = null;
+
+                                for (CompteBancaire compte : compteClient.getComptes()) {
+                                    if (compte.getNumero().equals(numeroCompteActuel)) {
+                                        compteActuel = compte;
+                                        break;
+                                    }
+                                }
+
+                                if (compteActuel != null) {
+                                    // Application des frais pour les comptes épargne
+                                    if (compteActuel instanceof CompteEpargne) {
+                                        CompteEpargne compteEpargne = (CompteEpargne) compteActuel;
+
+                                        // Vérifier si le compte est en dessous de la limite avant le retrait
+                                        if (compteEpargne.getSolde() < 1000.0) {
+                                            montant += 2.0; // Ajouter les frais
+                                            cnx.envoyer("RETRAIT AVERTISSEMENT : Des frais de 2.0 $ ont été appliqués.");
+                                        }
+                                    }
+
+                                    // Tentative de retrait
+                                    if (compteActuel.debiter(montant)) {
+                                        cnx.envoyer("RETRAIT OK Montant retiré : " + (montant - (compteActuel instanceof CompteEpargne ? 2.0 : 0)));
+                                    } else {
+                                        cnx.envoyer("RETRAIT NO Échec du retrait, fonds insuffisants");
+                                    }
+                                } else {
+                                    cnx.envoyer("RETRAIT NO Compte sélectionné non trouvé");
+                                }
+                            } else {
+                                cnx.envoyer("RETRAIT NO Compte-client non trouvé");
+                            }
+                        } else {
+                            cnx.envoyer("RETRAIT NO Compte-client non trouvé");
+                        }
+                    } catch (Exception e) {
+                        cnx.envoyer("RETRAIT NO Une erreur est survenue");
+                    }
+                    break;
+
+                case "FACTURE": // Permet au client de payer une facture.
+                    argument = evenement.getArgument(); // Récupérer les arguments de la commande.
+                    String[] parts = argument.split(" "); // Diviser les arguments en parties.
+
+                    // Vérification du format de la commande (au moins montant, numéro de facture, description)
+                    if (parts.length < 3) {
+                        cnx.envoyer("FACTURE NO!! Format incorrect");
+                        break;
+                    }
+
+                    try {
+                        // Extraction des parties
+                        double montant = Double.parseDouble(parts[0]); // Le montant de la facture.
+                        String numeroFacture = parts[1]; // Numéro de la facture.
+                        String description = String.join(" ", java.util.Arrays.copyOfRange(parts, 2, parts.length)); // Description.
+
+                        // Vérifier que le montant est valide (positif)
+                        if (montant <= 0) {
+                            cnx.envoyer("FACTURE NO!! Montant invalide, doit être positif");
+                            break;
+                        }
+
+                        // Accéder à la banque et aux informations du client
+                        Banque banqueFacture = serveurBanque.getBanque();
+                        String numCompteClientFacture = cnx.getNumeroCompteClient();
+
+                        if (numCompteClientFacture != null) {
+                            // Récupérer le compte client
+                            CompteClient compteClient = banqueFacture.getCompteClient(numCompteClientFacture);
+
+                            if (compteClient != null) {
+                                // Identifier le compte actif du client
+                                String numeroCompteActuelFacture = cnx.getNumeroCompteActuel();
+                                CompteBancaire compteActuel = null;
+
                                 for (CompteBancaire compte : compteClient.getComptes()) {
                                     if (compte.getNumero().equals(numeroCompteActuelFacture)) {
                                         compteActuel = compte;
@@ -265,109 +271,131 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                     }
                                 }
 
-                                // Si c'est un compte épargne, appliquer des frais
-                                if (compteActuel != null && compteActuel.getType() == TypeCompte.EPARGNE) {
-                                    montant += 5.0f; // Ajouter des frais fixes pour le compte épargne
-                                    cnx.envoyer("FACTURE AVERTISSEMENT Des frais de 5.0 ont été appliqués.");
-                                }
-
-                                // Effectuer le paiement de la facture (retrait du montant)
-                                if (banqueFacture.retirer(montant, numCompteClientFacture)) {
-                                    cnx.envoyer("FACTURE OK Paiement effectué pour la facture " + numeroFacture + ": " + description);
-                                } else {
-                                    cnx.envoyer("FACTURE NO Solde insuffisant");
-                                }
-                            } else {
-                                cnx.envoyer("FACTURE NO Compte non trouvé");
-                            }
-                            break;
-                        case "TRANSFER":
-                            argument = evenement.getArgument(); // Récupère l'argument (montant numéro-compte)
-                            String[] partsTransfer = argument.split(" "); // Divise l'argument en parties (montant, numero-compte)
-
-                            // Vérifie si l'argument contient au moins 2 éléments (montant et numero-compte)
-                            if (partsTransfer.length < 2) {
-                                cnx.envoyer("TRANSFER NO Format incorrect");
-                                break;
-                            }
-
-                            // Récupère les valeurs
-                            float montantTransfer = Float.parseFloat(partsTransfer[0]); // Montant à transférer
-                            String numeroCompteDestinataire = partsTransfer[1]; // Numéro du compte destinataire
-
-                            // Vérifie si le montant est valide
-                            if (montantTransfer <= 0) {
-                                cnx.envoyer("TRANSFER NO Montant invalide");
-                                break;
-                            }
-
-                            // Utilise serveurBanque pour accéder à la banque
-                            Banque banqueTransfer = serveurBanque.getBanque(); // Obtenir la banque
-
-                            // Vérifie le compte du client
-                            String numCompteClientTransfer = cnx.getNumeroCompteClient();
-                            if (numCompteClientTransfer != null) {
-                                // Récupère le compte client
-                                CompteClient compteClientTransfer = banqueTransfer.getCompteClient(numCompteClientTransfer);
-
-                                // Vérifie si le compte du client existe
-                                if (compteClientTransfer != null) {
-                                    // Vérifie que le compte actuel est bien un compte dans la liste
-                                    String numeroCompteActuelTransfer = cnx.getNumeroCompteActuel();
-                                    CompteBancaire compteActuelTransfer = null;
-                                    for (CompteBancaire compte : compteClientTransfer.getComptes()) {
-                                        if (compte.getNumero().equals(numeroCompteActuelTransfer)) {
-                                            compteActuelTransfer = compte;
-                                            break;
-                                        }
+                                if (compteActuel != null) {
+                                    // Si c'est un compte épargne, appliquer des frais
+                                    if (compteActuel instanceof CompteEpargne) {
+                                        montant += 2.0; // Ajouter des frais pour les comptes épargne
+                                        cnx.envoyer("FACTURE AVERTISSEMENT : Des frais de 2.0 $ ont été appliqués.");
                                     }
 
-                                    // Vérifie si le compte existe
-                                    if (compteActuelTransfer != null) {
-                                        // Vérifie si c'est un compte épargne et applique des frais
-                                        if (compteActuelTransfer.getType() == TypeCompte.EPARGNE) {
-                                            montantTransfer += 5.0f; // Ajouter des frais pour le compte épargne
-                                            cnx.envoyer("TRANSFER AVERTISSEMENT Des frais de 5.0 ont été appliqués.");
+                                    // Effectuer le paiement de la facture
+                                    if (compteActuel.debiter(montant)) {
+                                        cnx.envoyer("FACTURE OK Paiement effectué pour la facture " + numeroFacture + ": " + description);
+                                    } else {
+                                        cnx.envoyer("FACTURE NO Solde insuffisant ou erreur lors du paiement");
+                                    }
+                                } else {
+                                    cnx.envoyer("FACTURE NO Compte bancaire non trouvé");
+                                }
+                            } else {
+                                cnx.envoyer("FACTURE NO Compte client introuvable");
+                            }
+                        } else {
+                            cnx.envoyer("FACTURE NO Compte client non trouvé");
+                        }
+                    } catch (NumberFormatException e) {
+                        // Gestion des erreurs de format pour le montant
+                        cnx.envoyer("FACTURE NO!! Montant invalide");
+                    } catch (Exception e) {
+                        cnx.envoyer("FACTURE NO Une erreur est survenue");
+                    }
+                    break;
+
+
+                case "TRANSFER": // Permet au client de transférer de l'argent à un autre compte
+                    argument = evenement.getArgument(); // Récupère l'argument (format : montant numéro-compte)
+                    String[] partsTransfer = argument.split(" "); // Divise l'argument en deux parties : montant et numéro-compte
+
+                    // Vérifie que l'entrée contient bien un montant et un numéro de compte
+                    if (partsTransfer.length < 2) {
+                        cnx.envoyer("TRANSFER NO Format incorrect. Utilisez : TRANSFER montant numéro-compte");
+                        break;
+                    }
+
+                    try {
+                        // Extraction des informations depuis l'argument
+                        double montantTransfer = Double.parseDouble(partsTransfer[0]); // Récupérer le montant
+                        String numeroCompteDestinataire = partsTransfer[1]; // Récupérer le numéro de compte destinataire
+
+                        // Vérifie que le montant est positif
+                        if (montantTransfer <= 0) {
+                            cnx.envoyer("TRANSFER NO Montant invalide. Il doit être strictement positif.");
+                            break;
+                        }
+
+                        // Accès à la banque et au compte client actuel
+                        Banque banqueTransfer = serveurBanque.getBanque(); // Récupère l'objet banque
+                        String numCompteClientTransfer = cnx.getNumeroCompteClient(); // Numéro de compte client actuel
+
+                        if (numCompteClientTransfer != null) {
+                            CompteClient compteClientTransfer = banqueTransfer.getCompteClient(numCompteClientTransfer); // Récupère le client
+
+                            if (compteClientTransfer != null) {
+                                // Identification du compte actif
+                                String numeroCompteActuelTransfer = cnx.getNumeroCompteActuel(); // Compte actif
+                                CompteBancaire compteActuelTransfer = null;
+
+                                // Parcours des comptes pour trouver le compte actif
+                                for (CompteBancaire compte : compteClientTransfer.getComptes()) {
+                                    if (compte.getNumero().equals(numeroCompteActuelTransfer)) {
+                                        compteActuelTransfer = compte;
+                                        break;
+                                    }
+                                }
+
+                                if (compteActuelTransfer != null) {
+                                    // Si le compte actuel est un compte-épargne, appliquer les frais
+                                    if (compteActuelTransfer instanceof CompteEpargne) {
+                                        double frais = 2.0; // Exemple de frais pour le compte-épargne
+                                        montantTransfer += frais; // Ajouter les frais au montant
+                                        cnx.envoyer("TRANSFER AVERTISSEMENT : Des frais de " + frais + " $ ont été appliqués pour le compte-épargne.");
+                                    }
+
+                                    // Vérifie que le compte destinataire existe
+                                    CompteClient destinataireClient = banqueTransfer.getCompteClient(numeroCompteDestinataire);
+                                    if (destinataireClient != null) {
+                                        // Recherche du compte destinataire
+                                        CompteBancaire compteDestinataire = null;
+                                        for (CompteBancaire compte : destinataireClient.getComptes()) {
+                                            if (compte.getNumero().equals(numeroCompteDestinataire)) {
+                                                compteDestinataire = compte;
+                                                break;
+                                            }
                                         }
 
-                                        // Effectuer le transfert
-                                        // Vérifie si le montant est suffisant
-                                        if (banqueTransfer.retirer(montantTransfer, numeroCompteActuelTransfer)) {
-                                            // Vérifie que le compte destinataire existe
-                                            CompteClient destinataireClient = banqueTransfer.getCompteClient(numeroCompteDestinataire);
-                                            if (destinataireClient != null) {
-                                                boolean compteDestinataireTrouve = false;
-                                                for (CompteBancaire compte : destinataireClient.getComptes()) {
-                                                    if (compte.getNumero().equals(numeroCompteDestinataire)) {
-                                                        compteDestinataireTrouve = true;
-                                                        break;
-                                                    }
-                                                }
-
-                                                if (compteDestinataireTrouve) {
-                                                    // Effectue le dépôt sur le compte destinataire
-                                                    banqueTransfer.deposer(montantTransfer, numeroCompteDestinataire);
-                                                    cnx.envoyer("TRANSFER OK Montant transféré vers le compte " + numeroCompteDestinataire);
-                                                } else {
-                                                    cnx.envoyer("TRANSFER NO Compte destinataire non trouvé");
-                                                }
+                                        if (compteDestinataire != null) {
+                                            // Débite le montant du compte actuel
+                                            if (compteActuelTransfer.debiter(montantTransfer)) {
+                                                // Crédite le montant au compte destinataire
+                                                compteDestinataire.crediter(montantTransfer);
+                                                cnx.envoyer("TRANSFER OK Montant de " + montantTransfer + " $ transféré vers le compte " + numeroCompteDestinataire);
                                             } else {
-                                                cnx.envoyer("TRANSFER NO Compte destinataire non trouvé");
+                                                cnx.envoyer("TRANSFER NO Solde insuffisant pour effectuer le transfert.");
                                             }
                                         } else {
-                                            cnx.envoyer("TRANSFER NO Solde insuffisant");
+                                            cnx.envoyer("TRANSFER NO Compte destinataire introuvable.");
                                         }
                                     } else {
-                                        cnx.envoyer("TRANSFER NO Compte actuel non trouvé");
+                                        cnx.envoyer("TRANSFER NO Compte destinataire introuvable.");
                                     }
                                 } else {
-                                    cnx.envoyer("TRANSFER NO Compte client non trouvé");
+                                    cnx.envoyer("TRANSFER NO Compte actif introuvable.");
                                 }
                             } else {
-                                cnx.envoyer("TRANSFER NO Compte-client non trouvé");
+                                cnx.envoyer("TRANSFER NO Client introuvable.");
                             }
-                            break;
-                        /******************* TRAITEMENT PAR DÉFAUT *******************/
+                        } else {
+                            cnx.envoyer("TRANSFER NO Compte client introuvable.");
+                        }
+                    } catch (NumberFormatException e) {
+                        cnx.envoyer("TRANSFER NO Montant invalide. Veuillez entrer un nombre.");
+                    } catch (Exception e) {
+                        cnx.envoyer("TRANSFER NO Une erreur inattendue s'est produite.");
+                    }
+                    break;
+
+
+                /******************* TRAITEMENT PAR DÉFAUT *******************/
                         default: //Renvoyer le texte recu convertit en majuscules :
                             msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
                             cnx.envoyer(msg);
