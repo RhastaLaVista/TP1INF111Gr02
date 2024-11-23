@@ -267,22 +267,31 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             break;
 
                         } if(cnx.getNumeroCompteClient() != null) {
-                                // Identification du compte actif
-                                String numeroCompteActuelTransfer = cnx.getNumeroCompteActuel(); // Compte actif
-                                CompteBancaire compteActuelTransfer = null;
-                                
+                    // Identification du compte actif
+                    String numeroCompteActuelTransfer = cnx.getNumeroCompteActuel(); // Compte actif
+                    CompteBancaire compteActuelTransfer = null;
 
-                                    // Vérifie que le compte destinataire existe et transfers
-                                    for (CompteClient compte : banque.getComptes()) {
-                                        for(CompteBancaire comptes : compte.getComptes()){
-                                            if (comptes.getNumero().equals(numeroCompteBanqueDestinataire)) {
-                                                if(banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,numeroCompteBanqueDestinataire) && comptes.crediter(montantTransfer))
-                                                    cnx.envoyer("TRANSFER OK "+ montantTransfer+"ENVOYE");
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }break;
+
+                    // Vérifie que le compte destinataire existe et est soi client ou bancaire et transferes le montant a la bonne place
+                    for (CompteClient compte : banque.getComptes()) {
+                        if (banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer, numeroCompteBanqueDestinataire)) {//pour compteclient cheque default:compte.getComptes().get(0).crediter(montantTransfer)
+                            if(compte.getComptes().get(0).crediter(montantTransfer)){
+                            cnx.envoyer("TRANSFER OK " + montantTransfer + "ENVOYE AU CHEQUE PAR DEFAUT");
+                            break;
+                            }else{cnx.envoyer("TRANSFER NO MONTANT ZERO");break;}
+                        }
+                        for (CompteBancaire comptes : compte.getComptes()) {//SI C UN COMPTEBANCAIRE CHECKER
+                            if (comptes.getNumero().equals(numeroCompteBanqueDestinataire)) {
+                                if (banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer, numeroCompteBanqueDestinataire)){//pour compteclient cheque default:compte.getComptes().get(0).crediter(montantTransfer)
+                                    if (comptes.crediter(montantTransfer)) {
+                                        cnx.envoyer("TRANSFER OK " + montantTransfer + "ENVOYE");
+                                    }else{cnx.envoyer("TRANSFER NO MONTANT ZERO");}
+                                }    break;
+                            }
+                        }
+                    }
+                }
+                                break;
 
                 case "HIST":
                     banque = serveurBanque.getBanque();
