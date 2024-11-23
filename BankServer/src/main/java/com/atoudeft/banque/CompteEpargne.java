@@ -67,4 +67,7 @@ public class CompteEpargne extends CompteBancaire{
     public double getPRELEVEMENT() {
         return PRELEVEMENT;
     }
+    public double getLIMITE_INFERIEURE(){
+        return LIMITE_INFERIEURE;
+    }
 }

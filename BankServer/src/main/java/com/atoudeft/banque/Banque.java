@@ -190,7 +190,7 @@ public class Banque implements Serializable {
         }
         return false;
     }
-    public List getComptes(){
+    public List<CompteClient> getComptes(){
         return comptes;
     }
 }

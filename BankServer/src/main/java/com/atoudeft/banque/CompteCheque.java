@@ -34,14 +34,19 @@ public class CompteCheque extends com.atoudeft.banque.CompteBancaire {
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description)
     {
-        this.getHistorique().add(new OperationFacture(montant,TypeOperation.FACTURE,numeroFacture,description));
+        if(this.debiter(montant)){
+            this.getHistorique().add(new OperationFacture(montant, TypeOperation.FACTURE, numeroFacture, description));
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire)
-    {
-        this.getHistorique().add(new OperationTransfer(montant,TypeOperation.TRANSFER,numeroCompteDestinataire));
+    {   if(this.debiter(montant)) {
+        this.getHistorique().add(new OperationTransfer(montant, TypeOperation.TRANSFER, numeroCompteDestinataire));
+        return true;
+        }
         return false;
     }
 }
