@@ -130,35 +130,42 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("SELECT NO");
                     }
                     break;
-                case "DEPOT": // permettre au client de créditer son compte.
-                     argument = evenement.getArgument();
-                     try {
-                         cnx.envoyer("DEPOT: " + argument);
-                         // conversion du montant en double
-                         double montant = Double.parseDouble(argument);
-                         // Vérifier si le montant est valide (positif)
-                         if (montant <= 0) {
-                             cnx.envoyer("DEPOT NO! Montant invalide");
-                         } else {
-                             // Trouver le compte du client à partir du numéro de compte-client
-                             Banque banqueDepot = ((ServeurBanque) serveur).getBanque();
-                             String numCompteClientDepot = cnx.getNumeroCompteClient();
-                             if (numCompteClientDepot != null) {
-                                 // Effectuer le dépôt sur le compte
-                                 if (banqueDepot.deposer(montant, numCompteClientDepot)) {
-                                     cnx.envoyer("DEPOT OK! Montant depose : " + montant);
-                                 } else {
-                                     cnx.envoyer("DEPOT NO!! Echec du depot");
-                                 }
-                             } else {
-                                 cnx.envoyer("DEPOT NO!! Compte-client non trouve");
-                             }
-                         }
-                     } catch (NumberFormatException e) {
-                         // Si l'argument ne peut pas être converti en nombre
-                         cnx.envoyer("DEPOT NO!! Montant invalide");
-                     }
-                     break;
+                case "DEPOT": // Permettre au client de créditer son compte
+                    argument = evenement.getArgument();
+                    try {
+                        cnx.envoyer("DEPOT: " + argument);
+
+                        // Convertir l'argument en nombre
+                        double montant = Double.parseDouble(argument);
+
+                        // Vérifier que le montant est positif
+                        if (montant <= 0) {
+                            cnx.envoyer("DEPOT NO! Montant invalide");
+                            break;
+                        }
+
+                        // Récupérer le compte du client
+                        Banque banqueDepot = ((ServeurBanque) serveur).getBanque();
+                        String numeroCompteClient = cnx.getNumeroCompteClient(); // Le client connecté
+
+                        if (numeroCompteClient != null) {
+                            // Effectuer le dépôt
+                            boolean depotReussi = banqueDepot.deposer(montant, numeroCompteClient);
+                            if (depotReussi) {
+                                cnx.envoyer("DEPOT OK! Montant déposé : " + montant);
+                            } else {
+                                cnx.envoyer("DEPOT NO!! Impossible de créditer ce compte.");
+                            }
+                        } else {
+                            cnx.envoyer("DEPOT NO!! Compte-client non trouvé.");
+                        }
+                    } catch (NumberFormatException e) {
+                        // Gérer le cas où l'argument n'est pas un nombre valide
+                        cnx.envoyer("DEPOT NO!! Montant invalide. Veuillez entrer un nombre.");
+                    }
+                    break;
+
+
 
                 case "RETRAIT": // Permet au client de débiter son compte.
                     argument = evenement.getArgument();
