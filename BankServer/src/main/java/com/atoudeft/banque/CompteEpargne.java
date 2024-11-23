@@ -63,4 +63,8 @@ public class CompteEpargne extends CompteBancaire{
     public void ajouterInteret(){
         solde = solde + (solde * tauxInterets);
     }
+
+    public double getPRELEVEMENT() {
+        return PRELEVEMENT;
+    }
 }
