@@ -216,7 +216,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         // Extraction des parties
                         double montantFacture = Double.parseDouble(t[0]); // Le montant de la facture.
                         String numeroFacture = t[1]; // Numéro de la facture.
-                        String description = String.join(" ", Arrays.copyOfRange(t, 2, t.length)); // Description.
+                        String description = t[2];// Description.no spaces pls.
 
                         // Vérifier que le montant est valide (positif)
                         if (montantFacture <= 0) {
@@ -276,7 +276,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                     for (CompteClient compte : banque.getComptes()) {
                                         for(CompteBancaire comptes : compte.getComptes()){
                                             if (comptes.getNumero().equals(numeroCompteBanqueDestinataire)) {
-                                                if(banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,numeroCompteBanqueDestinataire)&& comptes.crediter(montantTransfer))
+                                                if(banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).transferer(montantTransfer,numeroCompteBanqueDestinataire) && comptes.crediter(montantTransfer))
                                                     cnx.envoyer("TRANSFER OK "+ montantTransfer+"ENVOYE");
                                                     break;
                                                 }
