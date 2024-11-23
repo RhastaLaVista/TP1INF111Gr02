@@ -44,13 +44,19 @@ public class CompteEpargne extends CompteBancaire{
 
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        this.getHistorique().add(new OperationFacture(montant,com.atoudeft.banque.TypeOperation.FACTURE,numeroFacture,description));
+        if(debiter(montant)) {
+            this.getHistorique().add(new OperationFacture(montant, com.atoudeft.banque.TypeOperation.FACTURE, numeroFacture, description));
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
-        this.getHistorique().add(new OperationTransfer(montant,TypeOperation.TRANSFER,numeroCompteDestinataire));
+        if(debiter(montant)) {
+            this.getHistorique().add(new OperationTransfer(montant, TypeOperation.TRANSFER, numeroCompteDestinataire));
+            return true;
+        }
         return false;
     }
 

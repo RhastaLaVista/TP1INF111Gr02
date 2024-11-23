@@ -61,11 +61,11 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque = serveurBanque.getBanque();
                     boolean dejaConnecte = false;
                     //On vérifie si le compte existe.
-                    if(banque.compteExiste(numCompteClient)){
+                    if (banque.compteExiste(numCompteClient)) {
                         //vérification de si ce compte est déja connectée dans une autre instance de BankClient
-                        for(Connexion connected: serveur.connectes) {
-                            if(((ConnexionBanque)connected).getNumeroCompteClient() != null){
-                                if ((connected instanceof ConnexionBanque && ((ConnexionBanque)connected).getNumeroCompteClient().equals(numCompteClient))) {
+                        for (Connexion connected : serveur.connectes) {
+                            if (((ConnexionBanque) connected).getNumeroCompteClient() != null) {
+                                if ((connected instanceof ConnexionBanque && ((ConnexionBanque) connected).getNumeroCompteClient().equals(numCompteClient))) {
                                     System.out.println("deja connecte ailleurs");
                                     cnx.envoyer("CONNECT NO");
                                     dejaConnecte = true;
@@ -74,7 +74,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         }
                         if (!dejaConnecte) {
                             //vérification des credentiels envoyés.
-                            if(banque.getCompteClient(numCompteClient).getNip().matches(nip)){
+                            if (banque.getCompteClient(numCompteClient).getNip().matches(nip)) {
                                 cnx.envoyer("CONNECT OK");
                                 cnx.setNumeroCompteClient(numCompteClient);
                                 cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
@@ -150,7 +150,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             cnx.envoyer("DEPOT NO! Montant invalide");
                             break;
                         }
-
                         // Récupérer le compte du client
                         Banque banqueDepot = ((ServeurBanque) serveur).getBanque();
                         String numeroCompteClient = cnx.getNumeroCompteClient(); // Le client connecté
@@ -160,19 +159,20 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             boolean depotReussi = banqueDepot.deposer(montant, numeroCompteClient);
                             if (depotReussi) {
                                 cnx.envoyer("DEPOT OK! Montant déposé : " + montant);
+                                break;
                             } else {
                                 cnx.envoyer("DEPOT NO!! Impossible de créditer ce compte.");
+                                break;
                             }
                         } else {
                             cnx.envoyer("DEPOT NO!! Compte-client non trouvé.");
+                            break;
                         }
                     } catch (NumberFormatException e) {
                         // Gérer le cas où l'argument n'est pas un nombre valide
                         cnx.envoyer("DEPOT NO!! Montant invalide. Veuillez entrer un nombre.");
+                        break;
                     }
-                    break;
-
-
 
                 case "RETRAIT": // Permet au client de débiter son compte.
                     argument = evenement.getArgument();
@@ -297,21 +297,27 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                         cnx.envoyer("FACTURE OK Paiement effectué pour la facture " + numeroFacture + ": " + description);
                                     } else {
                                         cnx.envoyer("FACTURE NO Solde insuffisant ou erreur lors du paiement");
+                                        break;
                                     }
                                 } else {
                                     cnx.envoyer("FACTURE NO Compte bancaire non trouvé");
+                                    break;
                                 }
                             } else {
                                 cnx.envoyer("FACTURE NO Compte client introuvable");
+                                break;
                             }
                         } else {
                             cnx.envoyer("FACTURE NO Compte client non trouvé");
+                            break;
                         }
                     } catch (NumberFormatException e) {
                         // Gestion des erreurs de format pour le montant
                         cnx.envoyer("FACTURE NO!! Montant invalide");
+                        break;
                     } catch (Exception e) {
                         cnx.envoyer("FACTURE NO Une erreur est survenue");
+                        break;
                     }
                     break;
 
@@ -338,11 +344,12 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         }
 
                         // Accès à la banque et au compte client actuel
-                        Banque banqueTransfer = serveurBanque.getBanque(); // Récupère l'objet banque
-                        String numCompteClientTransfer = cnx.getNumeroCompteClient(); // Numéro de compte client actuel
+                        banque = serveurBanque.getBanque(); // Récupère l'objet banque
+                        String numCompteClientTransfer = cnx.getNumeroCompteClient();// Numéro de compte client actuel
+                        int comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
 
                         if (numCompteClientTransfer != null) {
-                            CompteClient compteClientTransfer = banqueTransfer.getCompteClient(numCompteClientTransfer); // Récupère le client
+                            CompteClient compteClientTransfer = banque.getCompteClient(numCompteClientTransfer); // Récupère le client
 
                             if (compteClientTransfer != null) {
                                 // Identification du compte actif
@@ -366,7 +373,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                     }
 
                                     // Vérifie que le compte destinataire existe
-                                    CompteClient destinataireClient = banqueTransfer.getCompteClient(numeroCompteDestinataire);
+                                    CompteClient destinataireClient = banque.getCompteClient(numeroCompteDestinataire);
                                     if (destinataireClient != null) {
                                         // Recherche du compte destinataire
                                         CompteBancaire compteDestinataire = null;
@@ -385,26 +392,48 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                                                 cnx.envoyer("TRANSFER OK Montant de " + montantTransfer + " $ transféré vers le compte " + numeroCompteDestinataire);
                                             } else {
                                                 cnx.envoyer("TRANSFER NO Solde insuffisant pour effectuer le transfert.");
+                                                break;
                                             }
                                         } else {
                                             cnx.envoyer("TRANSFER NO Compte destinataire introuvable.");
+                                            break;
                                         }
                                     } else {
                                         cnx.envoyer("TRANSFER NO Compte destinataire introuvable.");
+                                        break;
                                     }
                                 } else {
                                     cnx.envoyer("TRANSFER NO Compte actif introuvable.");
+                                    break;
                                 }
                             } else {
                                 cnx.envoyer("TRANSFER NO Client introuvable.");
+                                break;
                             }
                         } else {
                             cnx.envoyer("TRANSFER NO Compte client introuvable.");
+                            break;
                         }
                     } catch (NumberFormatException e) {
                         cnx.envoyer("TRANSFER NO Montant invalide. Veuillez entrer un nombre.");
+                        break;
                     } catch (Exception e) {
                         cnx.envoyer("TRANSFER NO Une erreur inattendue s'est produite.");
+                        break;
+                    }
+                    break;
+
+
+                case "HIST":
+                    banque = serveurBanque.getBanque();
+                    int comptebancaireCourante = banque.getCompteClient(cnx.getNumeroCompteClient()).choixBancaire(cnx.getNumeroCompteActuel());
+
+                    banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique();
+
+                    //pour chaque opérations, Il va imprimer le toString de tout ce qui hérite de Opération.
+                    for(Operation op:banque.getCompteClient(cnx.getNumeroCompteClient()).getComptes().get(comptebancaireCourante).getHistorique()){
+                        cnx.envoyer(op.toString());
+                        cnx.envoyer("");
                     }
                     break;
                  

@@ -22,6 +22,7 @@ public class CompteCheque extends com.atoudeft.banque.CompteBancaire {
     public boolean debiter(double montant)
     {
         this.getHistorique().add(new OperationRetrait(montant,TypeOperation.RETRAIT));
+
         return false;
     }
 
