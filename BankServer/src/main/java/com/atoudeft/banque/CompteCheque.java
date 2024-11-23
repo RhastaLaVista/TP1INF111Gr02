@@ -12,18 +12,23 @@ public class CompteCheque extends com.atoudeft.banque.CompteBancaire {
     }
 
     @Override
-    public boolean crediter(double montant)
-    {
-        this.getHistorique().add(new OperationDepot(montant,TypeOperation.DEPOT));
-        return false;
+    public boolean crediter(double montant) {
+        if (montant <= 0) {
+            return false;
+        } else {this.getHistorique().add(new OperationDepot(montant,TypeOperation.DEPOT));
+            solde = +montant;
+            return true;
+        }
     }
 
     @Override
-    public boolean debiter(double montant)
-    {
-        this.getHistorique().add(new OperationRetrait(montant,TypeOperation.RETRAIT));
-
-        return false;
+    public boolean debiter(double montant) {
+        if (montant <= 0) {
+            return false;
+        } else {this.getHistorique().add(new OperationRetrait(montant,TypeOperation.RETRAIT));
+            solde = -montant;
+            return true;
+        }
     }
 
     @Override
